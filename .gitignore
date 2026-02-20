@@ -23,8 +23,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
+# env files — block ALL .env variants, keep only .example templates
+.env
+.env.*
+!.env.example
+!.env.*.example
 
 # vercel
 .vercel
