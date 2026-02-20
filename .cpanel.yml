@@ -2,7 +2,7 @@
 deployment:
   tasks:
     # ── 1. Set the deploy root ──────────────────────────────────────────────
-    - export DEPLOYPATH=/home/xqabdaou/cheapest-domain
+    - export DEPLOYPATH=/home/xqabdaou/repositories/cheapest-domain
 
     # ── 2. Copy repo files to deploy path ───────────────────────────────────
     - /bin/cp -R . $DEPLOYPATH
