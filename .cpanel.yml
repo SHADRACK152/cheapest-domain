@@ -1,0 +1,20 @@
+---
+deployment:
+  tasks:
+    # ── 1. Set the deploy root ──────────────────────────────────────────────
+    - export DEPLOYPATH=/home/xqabdaou/cheapest-domain
+
+    # ── 2. Copy repo files to deploy path ───────────────────────────────────
+    - /bin/cp -R . $DEPLOYPATH
+
+    # ── 3. Install dependencies ──────────────────────────────────────────────
+    - cd $DEPLOYPATH && npm install --legacy-peer-deps
+
+    # ── 4. Build Next.js (output: standalone) ────────────────────────────────
+    - cd $DEPLOYPATH && npm run build
+
+    # ── 5. Copy public assets into the standalone bundle ─────────────────────
+    #    Next.js standalone build does NOT include public/ or .next/static/
+    #    automatically — they must be copied manually.
+    - /bin/cp -R $DEPLOYPATH/public $DEPLOYPATH/.next/standalone/public
+    - /bin/cp -R $DEPLOYPATH/.next/static $DEPLOYPATH/.next/standalone/.next/static
