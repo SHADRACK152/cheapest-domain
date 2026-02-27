@@ -99,8 +99,8 @@ export function ChatWidget() {
             {/* Header */}
             <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="bg-white/20 rounded-full p-2">
-                  <Bot className="h-5 w-5" />
+                <div className="bg-white/20 rounded-full p-1">
+                  <img src="/image.png" alt="Kaya" className="h-6 w-6 rounded-full object-cover" />
                 </div>
                 <div>
                   <h3 className="font-bold">Kaya</h3>

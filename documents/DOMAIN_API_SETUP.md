@@ -1,3 +1,4 @@
+````markdown
 # Domain API Integration Guide
 
 ## Setup Instructions

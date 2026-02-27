@@ -1,3 +1,4 @@
+````markdown
 # CheapestDomains AI Chatbot Setup
 
 ## 🤖 AI API Integration

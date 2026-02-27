@@ -1,3 +1,4 @@
+````markdown
 # Performance Optimization Guide
 
 ## What Was Fixed

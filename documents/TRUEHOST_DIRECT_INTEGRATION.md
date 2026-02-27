@@ -1,3 +1,4 @@
+````markdown
 # TrueHost Integration - Live Search Results
 
 ## Overview

@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState, use, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, ArrowLeft, User } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, User, Share2, Twitter, Linkedin, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -29,6 +29,10 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
   const { slug } = use(params);
   const [post, setPost] = useState<BlogPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [processedHtml, setProcessedHtml] = useState<string | null>(null);
+  const [toc, setToc] = useState<Array<{ id: string; text: string; level: number }>>([]);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     async function fetchPost() {
@@ -51,6 +55,59 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     
     fetchPost();
   }, [slug]);
+
+  // Process HTML to add heading IDs and build TOC
+  useEffect(() => {
+    if (!post?.content) return;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(post.content, 'text/html');
+    const headings = Array.from(doc.querySelectorAll('h1,h2,h3')) as HTMLElement[];
+
+    const newToc: Array<{ id: string; text: string; level: number }> = [];
+    const seen: Record<string, number> = {};
+    headings.forEach((h, index) => {
+      const text = h.textContent?.trim() || 'heading';
+      const baseId = (h.id && h.id) || text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `heading-${index}`;
+      let id = baseId;
+      if (seen[id]) {
+        let counter = seen[id] + 1;
+        while (seen[`${baseId}-${counter}`]) counter++;
+        id = `${baseId}-${counter}`;
+        seen[baseId] = counter;
+        seen[id] = 1;
+      } else {
+        seen[id] = 1;
+      }
+      h.id = id;
+      newToc.push({ id, text, level: Number(h.tagName.replace('H', '')) });
+    });
+
+    setToc(newToc);
+    setProcessedHtml(doc.body.innerHTML);
+  }, [post?.content]);
+
+  // Reading progress within the article content
+  useEffect(() => {
+    function onScroll() {
+      const el = contentRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const total = Math.max(1, el.scrollHeight - windowHeight);
+      const scrolled = Math.min(Math.max(0, windowHeight - rect.top), el.scrollHeight);
+      const pct = Math.min(100, Math.max(0, (scrolled / (el.scrollHeight - windowHeight)) * 100));
+      setProgress(Number.isFinite(pct) ? Math.round(pct) : 0);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [processedHtml]);
 
   if (isLoading) {
     return (
@@ -88,6 +145,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-12">
       <div className="container mx-auto px-4 max-w-4xl">
+        {/* Reading progress bar */}
+        <div className="fixed left-0 right-0 top-0 z-50">
+          <div className="h-1 bg-white/0">
+            <div style={{ width: `${progress}%` }} className="h-1 bg-blue-600 transition-[width] duration-150" />
+          </div>
+        </div>
         {/* Back Button */}
         <Link href="/blog">
           <Button variant="ghost" className="mb-6 gap-2">
@@ -126,6 +189,38 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 {post.readTime} read
               </span>
             </div>
+
+            {/* Share / quick actions */}
+            <div className="mt-4 flex items-center gap-3">
+              <button
+                onClick={async () => {
+                  try { await navigator.clipboard.writeText(window.location.href); }
+                  catch { /* ignore */ }
+                }}
+                className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+                title="Copy link"
+              >
+                <Copy className="w-4 h-4" /> Copy link
+              </button>
+
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-sky-600 hover:text-sky-800 transition-colors"
+              >
+                <Twitter className="w-4 h-4" /> Tweet
+              </a>
+
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-slate-700 hover:text-slate-900 transition-colors"
+              >
+                <Linkedin className="w-4 h-4" /> Share
+              </a>
+            </div>
           </div>
 
           {/* Featured Image */}
@@ -139,21 +234,48 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             </div>
           )}
 
-          {/* Content */}
-          <div 
-            className="p-8 md:p-12 prose prose-lg max-w-none
-              prose-headings:text-[#111111] prose-headings:font-bold
-              prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
-              prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
-              prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
-              prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-              prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
-              prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-6
-              prose-li:text-gray-700 prose-li:mb-2
-              prose-strong:text-[#111111] prose-strong:font-semibold
-              prose-em:text-gray-700"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          {/* Table of Contents + Content */}
+          <div className="md:flex md:gap-10">
+            {/* TOC */}
+            <aside className="hidden md:block md:w-56 sticky top-28 self-start">
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm">
+                <div className="font-semibold mb-2">On this page</div>
+                {toc.length ? (
+                  <nav className="space-y-2">
+                    {toc.map((t, i) => (
+                      <a
+                        key={`${t.id}-${i}`}
+                        href={`#${t.id}`}
+                        className="block text-slate-700 hover:text-blue-600"
+                        style={{ paddingLeft: `${(t.level - 1) * 12}px` }}
+                      >
+                        {t.text}
+                      </a>
+                    ))}
+                  </nav>
+                ) : (
+                  <div className="text-slate-500">No sections</div>
+                )}
+              </div>
+            </aside>
+
+            <div className="flex-1">
+              <div ref={contentRef} 
+                className="p-8 md:p-12 prose prose-lg max-w-none
+                  prose-headings:text-[#111111] prose-headings:font-bold
+                  prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
+                  prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+                  prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                  prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
+                  prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-6
+                  prose-li:text-gray-700 prose-li:mb-2
+                  prose-strong:text-[#111111] prose-strong:font-semibold
+                  prose-em:text-gray-700"
+                dangerouslySetInnerHTML={{ __html: processedHtml || post.content }}
+              />
+            </div>
+          </div>
         </motion.article>
 
         {/* CTA */}

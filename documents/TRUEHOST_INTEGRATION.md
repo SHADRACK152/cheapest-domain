@@ -1,3 +1,4 @@
+````markdown
 # TrueHost API Integration Guide
 
 This application is part of the **TrueHost Kenya ecosystem** and has native integration with TrueHost's domain registration API.

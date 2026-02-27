@@ -1,3 +1,4 @@
+````markdown
 # Performance Optimizations Applied
 
 ## Overview

@@ -55,6 +55,11 @@ export const metadata: Metadata = {
     description: SITE_CONFIG.description,
     images: [SITE_CONFIG.ogImage],
   },
+  icons: {
+    icon: '/image.png',
+    shortcut: '/image.png',
+    apple: '/image.png'
+  },
   robots: {
     index: true,
     follow: true,
