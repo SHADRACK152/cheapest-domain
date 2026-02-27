@@ -100,7 +100,9 @@ export function ChatWidget() {
             <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="bg-white/20 rounded-full p-1">
-                  <img src="/image.png" alt="Kaya" className="h-5 w-5 rounded-full object-cover" />
+                  <div className="bg-white rounded-full shadow-sm border border-gray-100 p-0.5">
+                    <img src="/image.png" alt="Kaya" className="h-7 w-7 rounded-full object-cover" />
+                  </div>
                 </div>
                 <div>
                   <h3 className="font-bold">Kaya</h3>
