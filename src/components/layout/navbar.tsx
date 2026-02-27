@@ -54,8 +54,8 @@ export function Navbar() {
       <nav className="container-wide flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white transition-transform duration-200 group-hover:scale-105 overflow-hidden">
-            <img src="/image.png" alt="CheapestDomains" className="h-7 w-7 object-cover" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-primary-600 text-white transition-transform duration-200 group-hover:scale-105 overflow-hidden">
+            <img src="/image.png" alt="CheapestDomains" className="h-5 w-5 object-cover" />
           </div>
           <span className="text-lg font-bold text-[#111111]">
             Cheapest<span className="text-primary-600">Domains</span>
