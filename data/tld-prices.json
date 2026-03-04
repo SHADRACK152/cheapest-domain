@@ -1,0 +1,2085 @@
+{
+  "fetchedAt": "2026-03-04T14:39:19.009Z",
+  "currencyId": 1,
+  "currency": {
+    "id": 1,
+    "code": "KES",
+    "prefix": "Ksh ",
+    "suffix": "",
+    "format": 1,
+    "rate": "1.00000"
+  },
+  "exchange": {
+    "USD_TO_KES": 150
+  },
+  "tlds": {
+    ".co.ke": {
+      "reg": 999,
+      "renew": 1200
+    },
+    ".com": {
+      "reg": 1200,
+      "renew": 1600
+    },
+    ".net": {
+      "reg": 1856,
+      "renew": 2010
+    },
+    ".org": {
+      "reg": 1200,
+      "renew": 1500
+    },
+    ".ke": {
+      "reg": 3000,
+      "renew": 3000
+    },
+    ".africa": {
+      "reg": 1800,
+      "renew": 2000
+    },
+    ".top": {
+      "reg": 197,
+      "renew": 648
+    },
+    ".ac": {
+      "reg": 4146,
+      "renew": 4146
+    },
+    ".accountants": {
+      "reg": 16557,
+      "renew": 16557
+    },
+    ".actor": {
+      "reg": 2082,
+      "renew": 6114
+    },
+    ".airforce": {
+      "reg": 4146,
+      "renew": 4146
+    },
+    ".archi": {
+      "reg": 2169,
+      "renew": 14135
+    },
+    ".army": {
+      "reg": 2256,
+      "renew": 5357
+    },
+    ".art": {
+      "reg": 559,
+      "renew": 3541
+    },
+    ".asia": {
+      "reg": 635,
+      "renew": 1951
+    },
+    ".at": {
+      "reg": 1724,
+      "renew": 1724
+    },
+    ".audio": {
+      "reg": 15800,
+      "renew": 17314
+    },
+    ".baby": {
+      "reg": 2633,
+      "renew": 8232
+    },
+    ".bar": {
+      "reg": 439,
+      "renew": 8232
+    },
+    ".bayern": {
+      "reg": 5205,
+      "renew": 5205
+    },
+    ".beauty": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".beer": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".bible": {
+      "reg": 6719,
+      "renew": 6719
+    },
+    ".bio": {
+      "reg": 862,
+      "renew": 8989
+    },
+    ".blackfriday": {
+      "reg": 17314,
+      "renew": 17314
+    },
+    ".boats": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".bond": {
+      "reg": 362,
+      "renew": 2172
+    },
+    ".boston": {
+      "reg": 2633,
+      "renew": 2633
+    },
+    ".cab": {
+      "reg": 4600,
+      "renew": 4600
+    },
+    ".camp": {
+      "reg": 8081,
+      "renew": 8081
+    },
+    ".casa": {
+      "reg": 1043,
+      "renew": 1043
+    },
+    ".casino": {
+      "reg": 951,
+      "renew": 22611
+    },
+    ".cfd": {
+      "reg": 197,
+      "renew": 2172
+    },
+    ".charity": {
+      "reg": 2178,
+      "renew": 3541
+    },
+    ".cheap": {
+      "reg": 1037,
+      "renew": 4903
+    },
+    ".christmas": {
+      "reg": 5205,
+      "renew": 5205
+    },
+    ".click": {
+      "reg": 288,
+      "renew": 1573
+    },
+    ".coach": {
+      "reg": 9595,
+      "renew": 9595
+    },
+    ".condos": {
+      "reg": 7930,
+      "renew": 7930
+    },
+    ".contact": {
+      "reg": 2178,
+      "renew": 2178
+    },
+    ".cooking": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".courses": {
+      "reg": 4146,
+      "renew": 4146
+    },
+    ".cx": {
+      "reg": 2784,
+      "renew": 2784
+    },
+    ".cyou": {
+      "reg": 211,
+      "renew": 2172
+    },
+    ".diet": {
+      "reg": 15800,
+      "renew": 17314
+    },
+    ".doctor": {
+      "reg": 1325,
+      "renew": 12934
+    },
+    ".dog": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".earth": {
+      "reg": 2784,
+      "renew": 2784
+    },
+    ".eu": {
+      "reg": 847,
+      "renew": 816
+    },
+    ".exposed": {
+      "reg": 2935,
+      "renew": 2935
+    },
+    ".fashion": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".film": {
+      "reg": 9897,
+      "renew": 9897
+    },
+    ".fishing": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".fit": {
+      "reg": 332,
+      "renew": 3843
+    },
+    ".flowers": {
+      "reg": 15800,
+      "renew": 17314
+    },
+    ".fm": {
+      "reg": 18320.59,
+      "renew": 18320.59
+    },
+    ".gallery": {
+      "reg": 4556,
+      "renew": 4660
+    },
+    ".game": {
+      "reg": 46827,
+      "renew": 49854
+    },
+    ".games": {
+      "reg": 4600,
+      "renew": 4600
+    },
+    ".garden": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".gay": {
+      "reg": 4297,
+      "renew": 4297
+    },
+    ".gift": {
+      "reg": 2178,
+      "renew": 2178
+    },
+    ".guitars": {
+      "reg": 15800,
+      "renew": 17314
+    },
+    ".hair": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".help": {
+      "reg": 160,
+      "renew": 4336
+    },
+    ".hiphop": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".hiv": {
+      "reg": 29573,
+      "renew": 29573
+    },
+    ".hockey": {
+      "reg": 8081,
+      "renew": 8081
+    },
+    ".homes": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".horse": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".hosting": {
+      "reg": 46827,
+      "renew": 49854
+    },
+    ".ink": {
+      "reg": 332,
+      "renew": 3314
+    },
+    ".irish": {
+      "reg": 863,
+      "renew": 2935
+    },
+    ".ist": {
+      "reg": 2180,
+      "renew": 2180
+    },
+    ".istanbul": {
+      "reg": 2558,
+      "renew": 2558
+    },
+    ".jetzt": {
+      "reg": 3087,
+      "renew": 3087
+    },
+    ".juegos": {
+      "reg": 49854,
+      "renew": 49854
+    },
+    ".link": {
+      "reg": 1210,
+      "renew": 1210
+    },
+    ".llc": {
+      "reg": 1422,
+      "renew": 5660
+    },
+    ".lol": {
+      "reg": 211,
+      "renew": 3995
+    },
+    ".london": {
+      "reg": 4751,
+      "renew": 4751
+    },
+    ".luxe": {
+      "reg": 2088,
+      "renew": 2088
+    },
+    ".makeup": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".melbourne": {
+      "reg": 8688,
+      "renew": 8688
+    },
+    ".menu": {
+      "reg": 4146,
+      "renew": 4146
+    },
+    ".miami": {
+      "reg": 2633,
+      "renew": 2633
+    },
+    ".moe": {
+      "reg": 2027,
+      "renew": 2027
+    },
+    ".mom": {
+      "reg": 211,
+      "renew": 4146
+    },
+    ".monster": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".motorcycles": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".mx": {
+      "reg": 5962,
+      "renew": 6568
+    },
+    ".nyc": {
+      "reg": 4336,
+      "renew": 4336
+    },
+    ".observer": {
+      "reg": 1573,
+      "renew": 1573
+    },
+    ".one": {
+      "reg": 589,
+      "renew": 2330
+    },
+    ".ooo": {
+      "reg": 3692,
+      "renew": 3692
+    },
+    ".organic": {
+      "reg": 2169,
+      "renew": 11562
+    },
+    ".page": {
+      "reg": 1845,
+      "renew": 1876
+    },
+    ".pet": {
+      "reg": 1299,
+      "renew": 3389
+    },
+    ".photo": {
+      "reg": 4449,
+      "renew": 4449
+    },
+    ".pics": {
+      "reg": 211,
+      "renew": 3995
+    },
+    ".poker": {
+      "reg": 1299,
+      "renew": 8989
+    },
+    ".property": {
+      "reg": 3238,
+      "renew": 17314
+    },
+    ".quest": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".realty": {
+      "reg": 3238,
+      "renew": 45164
+    },
+    ".reise": {
+      "reg": 4131,
+      "renew": 11108
+    },
+    ".rodeo": {
+      "reg": 1195,
+      "renew": 1195
+    },
+    ".sbs": {
+      "reg": 197,
+      "renew": 2172
+    },
+    ".sexy": {
+      "reg": 416124,
+      "renew": 416124
+    },
+    ".sh": {
+      "reg": 5205,
+      "renew": 5205
+    },
+    ".shopping": {
+      "reg": 3995,
+      "renew": 3995
+    },
+    ".ski": {
+      "reg": 3474,
+      "renew": 8989
+    },
+    ".skin": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".storage": {
+      "reg": 77097,
+      "renew": 80124
+    },
+    ".study": {
+      "reg": 4297,
+      "renew": 4297
+    },
+    ".sucks": {
+      "reg": 33054,
+      "renew": 33054
+    },
+    ".surf": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".sydney": {
+      "reg": 8688,
+      "renew": 8688
+    },
+    ".tattoo": {
+      "reg": 5205,
+      "renew": 5205
+    },
+    ".tel": {
+      "reg": 1543,
+      "renew": 1543
+    },
+    ".tools": {
+      "reg": 1584,
+      "renew": 4854
+    },
+    ".tube": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".uno": {
+      "reg": 514,
+      "renew": 2633
+    },
+    ".vegas": {
+      "reg": 2784,
+      "renew": 6568
+    },
+    ".vip": {
+      "reg": 770,
+      "renew": 2263
+    },
+    ".vodka": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".vote": {
+      "reg": 3474,
+      "renew": 12622
+    },
+    ".wedding": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".whoswho": {
+      "reg": 832191,
+      "renew": 832191
+    },
+    ".work": {
+      "reg": 332,
+      "renew": 1270
+    },
+    ".ws": {
+      "reg": 816,
+      "renew": 3238
+    },
+    ".yachts": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".yoga": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".ca": {
+      "reg": 1422,
+      "renew": 1422
+    },
+    ".xyz": {
+      "reg": 370,
+      "renew": 2540
+    },
+    ".world": {
+      "reg": 362,
+      "renew": 5660
+    },
+    ".site": {
+      "reg": 362,
+      "renew": 4297
+    },
+    ".or.ke": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".info": {
+      "reg": 574,
+      "renew": 3692
+    },
+    ".ac.ke": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".sc.ke": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".biz": {
+      "reg": 962,
+      "renew": 2633
+    },
+    ".ne.ke": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".info.ke": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".credit": {
+      "reg": 1385,
+      "renew": 12773
+    },
+    ".go.ke": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".co.ug": {
+      "reg": 5620,
+      "renew": 5620
+    },
+    ".co.rw": {
+      "reg": 1800,
+      "renew": 1800
+    },
+    ".co.tz": {
+      "reg": 1920,
+      "renew": 1920
+    },
+    ".co": {
+      "reg": 1640,
+      "renew": 5500
+    },
+    ".me": {
+      "reg": 1270,
+      "renew": 2935
+    },
+    ".mobi": {
+      "reg": 777,
+      "renew": 5811
+    },
+    ".tv": {
+      "reg": 3995,
+      "renew": 3995
+    },
+    ".me.ke": {
+      "reg": 1200,
+      "renew": 1200
+    },
+    ".pro": {
+      "reg": 468,
+      "renew": 3692
+    },
+    ".us": {
+      "reg": 629,
+      "renew": 1119
+    },
+    ".in": {
+      "reg": 966,
+      "renew": 1055
+    },
+    ".so": {
+      "reg": 9500,
+      "renew": 9500
+    },
+    ".academy": {
+      "reg": 2169,
+      "renew": 6568
+    },
+    ".accountant": {
+      "reg": 3480,
+      "renew": 3480
+    },
+    ".agency": {
+      "reg": 689,
+      "renew": 4146
+    },
+    ".or.tz": {
+      "reg": 3000,
+      "renew": 3000
+    },
+    ".apartments": {
+      "reg": 6870,
+      "renew": 6870
+    },
+    ".today": {
+      "reg": 514,
+      "renew": 3995
+    },
+    ".associates": {
+      "reg": 2256,
+      "renew": 5508
+    },
+    ".attorney": {
+      "reg": 8535,
+      "renew": 8535
+    },
+    ".auction": {
+      "reg": 4903,
+      "renew": 4903
+    },
+    ".band": {
+      "reg": 2430,
+      "renew": 4297
+    },
+    ".bargains": {
+      "reg": 1559,
+      "renew": 3919
+    },
+    ".bid": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".bike": {
+      "reg": 1559,
+      "renew": 5357
+    },
+    ".bingo": {
+      "reg": 8081,
+      "renew": 8081
+    },
+    ".black": {
+      "reg": 1908,
+      "renew": 8989
+    },
+    ".blue": {
+      "reg": 2169,
+      "renew": 3389
+    },
+    ".boutique": {
+      "reg": 689,
+      "renew": 4903
+    },
+    ".builders": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".co.zm": {
+      "reg": 12590,
+      "renew": 12590
+    },
+    ".cafe": {
+      "reg": 6265,
+      "renew": 6265
+    },
+    ".camera": {
+      "reg": 6870,
+      "renew": 6870
+    },
+    ".cards": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".care": {
+      "reg": 2604,
+      "renew": 5962
+    },
+    ".cash": {
+      "reg": 1733,
+      "renew": 4903
+    },
+    ".catering": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".business": {
+      "reg": 2481,
+      "renew": 2481
+    },
+    ".capital": {
+      "reg": 9595,
+      "renew": 9595
+    },
+    ".careers": {
+      "reg": 9897,
+      "renew": 9897
+    },
+    ".space": {
+      "reg": 514,
+      "renew": 3389
+    },
+    ".hospital": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".center": {
+      "reg": 1037,
+      "renew": 4297
+    },
+    ".chat": {
+      "reg": 1299,
+      "renew": 5357
+    },
+    ".shop": {
+      "reg": 350,
+      "renew": 5700.24
+    },
+    ".church": {
+      "reg": 1647,
+      "renew": 6114
+    },
+    ".clothing": {
+      "reg": 4903,
+      "renew": 4903
+    },
+    ".cleaning": {
+      "reg": 10351,
+      "renew": 10351
+    },
+    ".city": {
+      "reg": 725,
+      "renew": 3820
+    },
+    ".claims": {
+      "reg": 2169,
+      "renew": 7930
+    },
+    ".clinic": {
+      "reg": 8838,
+      "renew": 8838
+    },
+    ".nl": {
+      "reg": 966,
+      "renew": 1119
+    },
+    ".codes": {
+      "reg": 863,
+      "renew": 8989
+    },
+    ".college": {
+      "reg": 2633,
+      "renew": 8989
+    },
+    ".consulting": {
+      "reg": 2343,
+      "renew": 7022
+    },
+    ".coffee": {
+      "reg": 1559,
+      "renew": 5357
+    },
+    ".community": {
+      "reg": 5508,
+      "renew": 5508
+    },
+    ".company": {
+      "reg": 3374,
+      "renew": 3374
+    },
+    ".computer": {
+      "reg": 2256,
+      "renew": 5357
+    },
+    ".co.in": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".construction": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".contractors": {
+      "reg": 3995,
+      "renew": 3995
+    },
+    ".club": {
+      "reg": 650,
+      "renew": 2103
+    },
+    ".coupons": {
+      "reg": 689,
+      "renew": 6568
+    },
+    ".creditcard": {
+      "reg": 21854,
+      "renew": 21854
+    },
+    ".cricket": {
+      "reg": 3480,
+      "renew": 3480
+    },
+    ".cruises": {
+      "reg": 8535,
+      "renew": 8535
+    },
+    ".dance": {
+      "reg": 2082,
+      "renew": 3692
+    },
+    ".date": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".dating": {
+      "reg": 2604,
+      "renew": 8838
+    },
+    ".degree": {
+      "reg": 6719,
+      "renew": 6719
+    },
+    ".delivery": {
+      "reg": 777,
+      "renew": 8081
+    },
+    ".dental": {
+      "reg": 9897,
+      "renew": 9897
+    },
+    ".dentist": {
+      "reg": 9897,
+      "renew": 9897
+    },
+    ".design": {
+      "reg": 6864,
+      "renew": 6864
+    },
+    ".diamonds": {
+      "reg": 6568,
+      "renew": 6568
+    },
+    ".democrat": {
+      "reg": 3843,
+      "renew": 3843
+    },
+    ".deals": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".digital": {
+      "reg": 438,
+      "renew": 5660
+    },
+    ".direct": {
+      "reg": 2169,
+      "renew": 5357
+    },
+    ".discount": {
+      "reg": 4600,
+      "renew": 4600
+    },
+    ".domains": {
+      "reg": 5962,
+      "renew": 5962
+    },
+    ".download": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".energy": {
+      "reg": 1647,
+      "renew": 16557
+    },
+    ".directory": {
+      "reg": 429,
+      "renew": 3541
+    },
+    ".email": {
+      "reg": 689,
+      "renew": 4146
+    },
+    ".education": {
+      "reg": 4751,
+      "renew": 4751
+    },
+    ".equipment": {
+      "reg": 3389,
+      "renew": 3389
+    },
+    ".engineering": {
+      "reg": 2082,
+      "renew": 8989
+    },
+    ".expert": {
+      "reg": 7476,
+      "renew": 7476
+    },
+    ".engineer": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".enterprises": {
+      "reg": 1037,
+      "renew": 5357
+    },
+    ".estate": {
+      "reg": 1299,
+      "renew": 5357
+    },
+    ".exchange": {
+      "reg": 1559,
+      "renew": 5357
+    },
+    ".events": {
+      "reg": 1908,
+      "renew": 5962
+    },
+    ".edu.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".express": {
+      "reg": 1037,
+      "renew": 5357
+    },
+    ".fail": {
+      "reg": 4146,
+      "renew": 4146
+    },
+    ".faith": {
+      "reg": 1724,
+      "renew": 1724
+    },
+    ".family": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".fans": {
+      "reg": 1405,
+      "renew": 1405
+    },
+    ".finance": {
+      "reg": 1733,
+      "renew": 8838
+    },
+    ".financial": {
+      "reg": 2430,
+      "renew": 7930
+    },
+    ".flights": {
+      "reg": 7930,
+      "renew": 7930
+    },
+    ".football": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".farm": {
+      "reg": 2216,
+      "renew": 6269
+    },
+    ".fitness": {
+      "reg": 777,
+      "renew": 5508
+    },
+    ".fish": {
+      "reg": 5962,
+      "renew": 5962
+    },
+    ".feedback": {
+      "reg": 72466,
+      "renew": 72466
+    },
+    ".florist": {
+      "reg": 4903,
+      "renew": 4903
+    },
+    ".forsale": {
+      "reg": 2082,
+      "renew": 4903
+    },
+    ".foundation": {
+      "reg": 2178,
+      "renew": 3541
+    },
+    ".fund": {
+      "reg": 9595,
+      "renew": 9595
+    },
+    ".furniture": {
+      "reg": 3474,
+      "renew": 14287
+    },
+    ".futbol": {
+      "reg": 2633,
+      "renew": 2633
+    },
+    ".fyi": {
+      "reg": 2633,
+      "renew": 2633
+    },
+    ".travel": {
+      "reg": 24506,
+      "renew": 24506
+    },
+    ".global": {
+      "reg": 5196,
+      "renew": 12939
+    },
+    ".gold": {
+      "reg": 863,
+      "renew": 12773
+    },
+    ".golf": {
+      "reg": 689,
+      "renew": 8838
+    },
+    ".green": {
+      "reg": 11260,
+      "renew": 11260
+    },
+    ".gifts": {
+      "reg": 4903,
+      "renew": 4903
+    },
+    ".gives": {
+      "reg": 2178,
+      "renew": 3541
+    },
+    ".glass": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".gmbh": {
+      "reg": 5628,
+      "renew": 6000
+    },
+    ".gripe": {
+      "reg": 4600,
+      "renew": 4600
+    },
+    ".gratis": {
+      "reg": 3087,
+      "renew": 3087
+    },
+    ".graphics": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".group": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".host": {
+      "reg": 665,
+      "renew": 14741
+    },
+    ".guide": {
+      "reg": 5660,
+      "renew": 5660
+    },
+    ".haus": {
+      "reg": 1733,
+      "renew": 4600
+    },
+    ".guru": {
+      "reg": 515,
+      "renew": 5660
+    },
+    ".house": {
+      "reg": 1733,
+      "renew": 6114
+    },
+    ".immo": {
+      "reg": 4751,
+      "renew": 4751
+    },
+    ".immobilien": {
+      "reg": 5054,
+      "renew": 5054
+    },
+    ".industries": {
+      "reg": 6265,
+      "renew": 6265
+    },
+    ".institute": {
+      "reg": 1037,
+      "renew": 3692
+    },
+    ".international": {
+      "reg": 1299,
+      "renew": 4297
+    },
+    ".healthcare": {
+      "reg": 11865,
+      "renew": 11865
+    },
+    ".health": {
+      "reg": 8611,
+      "renew": 8611
+    },
+    ".holdings": {
+      "reg": 8838,
+      "renew": 8838
+    },
+    ".holiday": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".insure": {
+      "reg": 9897,
+      "renew": 9897
+    },
+    ".investments": {
+      "reg": 2430,
+      "renew": 18070
+    },
+    ".jewelry": {
+      "reg": 8838,
+      "renew": 8838
+    },
+    ".kim": {
+      "reg": 1299,
+      "renew": 2557
+    },
+    ".store": {
+      "reg": 665,
+      "renew": 6568
+    },
+    ".kaufen": {
+      "reg": 816,
+      "renew": 3995
+    },
+    ".kitchen": {
+      "reg": 1733,
+      "renew": 8838
+    },
+    ".la": {
+      "reg": 4146,
+      "renew": 4146
+    },
+    ".lawyer": {
+      "reg": 8535,
+      "renew": 8535
+    },
+    ".lease": {
+      "reg": 6492,
+      "renew": 6492
+    },
+    ".legal": {
+      "reg": 9595,
+      "renew": 9595
+    },
+    ".lgbt": {
+      "reg": 1733,
+      "renew": 10957
+    },
+    ".land": {
+      "reg": 1908,
+      "renew": 5508
+    },
+    ".buzz": {
+      "reg": 243,
+      "renew": 4146
+    },
+    ".lighting": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".life": {
+      "reg": 362,
+      "renew": 5054
+    },
+    ".limited": {
+      "reg": 4903,
+      "renew": 4903
+    },
+    ".limo": {
+      "reg": 6643,
+      "renew": 6643
+    },
+    ".live": {
+      "reg": 514,
+      "renew": 4600
+    },
+    ".loan": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".loans": {
+      "reg": 1733,
+      "renew": 15043
+    },
+    ".love": {
+      "reg": 725,
+      "renew": 3541
+    },
+    ".ltd": {
+      "reg": 1559,
+      "renew": 4146
+    },
+    ".management": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".movie": {
+      "reg": 6847,
+      "renew": 55438
+    },
+    ".mortgage": {
+      "reg": 8535,
+      "renew": 8535
+    },
+    ".maison": {
+      "reg": 8081,
+      "renew": 8081
+    },
+    ".memorial": {
+      "reg": 6114,
+      "renew": 6114
+    },
+    ".market": {
+      "reg": 6265,
+      "renew": 6265
+    },
+    ".cloud": {
+      "reg": 559,
+      "renew": 2633
+    },
+    ".marketing": {
+      "reg": 895,
+      "renew": 5541
+    },
+    ".mba": {
+      "reg": 1733,
+      "renew": 5357
+    },
+    ".media": {
+      "reg": 951,
+      "renew": 6265
+    },
+    ".moda": {
+      "reg": 5508,
+      "renew": 5508
+    },
+    ".money": {
+      "reg": 1908,
+      "renew": 5357
+    },
+    ".navy": {
+      "reg": 5508,
+      "renew": 5508
+    },
+    ".network": {
+      "reg": 689,
+      "renew": 4751
+    },
+    ".news": {
+      "reg": 1299,
+      "renew": 4600
+    },
+    ".ninja": {
+      "reg": 1908,
+      "renew": 3692
+    },
+    ".online": {
+      "reg": 483,
+      "renew": 4422
+    },
+    ".partners": {
+      "reg": 838,
+      "renew": 9498
+    },
+    ".parts": {
+      "reg": 1516,
+      "renew": 5508
+    },
+    ".party": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".photography": {
+      "reg": 1908,
+      "renew": 4903
+    },
+    ".photos": {
+      "reg": 2183,
+      "renew": 4750
+    },
+    ".pictures": {
+      "reg": 2027,
+      "renew": 2027
+    },
+    ".pink": {
+      "reg": 1299,
+      "renew": 3389
+    },
+    ".pizza": {
+      "reg": 1733,
+      "renew": 8838
+    },
+    ".press": {
+      "reg": 665,
+      "renew": 11562
+    },
+    ".promo": {
+      "reg": 1733,
+      "renew": 3389
+    },
+    ".place": {
+      "reg": 2935,
+      "renew": 2935
+    },
+    ".plumbing": {
+      "reg": 9897,
+      "renew": 9897
+    },
+    ".plus": {
+      "reg": 1299,
+      "renew": 6265
+    },
+    ".productions": {
+      "reg": 1299,
+      "renew": 5508
+    },
+    ".pub": {
+      "reg": 5508,
+      "renew": 5508
+    },
+    ".pw": {
+      "reg": 514,
+      "renew": 2633
+    },
+    ".racing": {
+      "reg": 1724,
+      "renew": 1724
+    },
+    ".recipes": {
+      "reg": 993,
+      "renew": 10805
+    },
+    ".red": {
+      "reg": 1299,
+      "renew": 3087
+    },
+    ".rehab": {
+      "reg": 4297,
+      "renew": 4297
+    },
+    ".reisen": {
+      "reg": 514,
+      "renew": 2405
+    },
+    ".rent": {
+      "reg": 2633,
+      "renew": 8989
+    },
+    ".team": {
+      "reg": 689,
+      "renew": 5054
+    },
+    ".rentals": {
+      "reg": 863,
+      "renew": 6114
+    },
+    ".repair": {
+      "reg": 1299,
+      "renew": 4373
+    },
+    ".republican": {
+      "reg": 816,
+      "renew": 4297
+    },
+    ".rest": {
+      "reg": 288,
+      "renew": 4297
+    },
+    ".restaurant": {
+      "reg": 1908,
+      "renew": 8687
+    },
+    ".review": {
+      "reg": 1724,
+      "renew": 1724
+    },
+    ".report": {
+      "reg": 1037,
+      "renew": 3389
+    },
+    ".reviews": {
+      "reg": 8535,
+      "renew": 8535
+    },
+    ".rip": {
+      "reg": 3087,
+      "renew": 3087
+    },
+    ".rocks": {
+      "reg": 863,
+      "renew": 2935
+    },
+    ".run": {
+      "reg": 515,
+      "renew": 3541
+    },
+    ".salon": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".sale": {
+      "reg": 863,
+      "renew": 5357
+    },
+    ".sarl": {
+      "reg": 4600,
+      "renew": 4600
+    },
+    ".schule": {
+      "reg": 3995,
+      "renew": 3995
+    },
+    ".science": {
+      "reg": 1724,
+      "renew": 1724
+    },
+    ".shiksha": {
+      "reg": 1733,
+      "renew": 2300
+    },
+    ".school": {
+      "reg": 4373,
+      "renew": 4373
+    },
+    ".services": {
+      "reg": 1037,
+      "renew": 5508
+    },
+    ".shoes": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".show": {
+      "reg": 1559,
+      "renew": 5962
+    },
+    ".singles": {
+      "reg": 1299,
+      "renew": 3995
+    },
+    ".soccer": {
+      "reg": 3389,
+      "renew": 3389
+    },
+    ".solutions": {
+      "reg": 1299,
+      "renew": 4297
+    },
+    ".stream": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".software": {
+      "reg": 2169,
+      "renew": 5357
+    },
+    ".social": {
+      "reg": 1422,
+      "renew": 5357
+    },
+    ".solar": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".studio": {
+      "reg": 1906,
+      "renew": 6114
+    },
+    ".style": {
+      "reg": 2560,
+      "renew": 5357
+    },
+    ".supplies": {
+      "reg": 3389,
+      "renew": 3389
+    },
+    ".supply": {
+      "reg": 3541,
+      "renew": 3541
+    },
+    ".support": {
+      "reg": 1037,
+      "renew": 3692
+    },
+    ".systems": {
+      "reg": 2082,
+      "renew": 4751
+    },
+    ".technology": {
+      "reg": 1037,
+      "renew": 3465
+    },
+    ".surgery": {
+      "reg": 7476,
+      "renew": 7476
+    },
+    ".tax": {
+      "reg": 1733,
+      "renew": 9595
+    },
+    ".taxi": {
+      "reg": 1299,
+      "renew": 8838
+    },
+    ".tech": {
+      "reg": 1164,
+      "renew": 7476
+    },
+    ".tennis": {
+      "reg": 8989,
+      "renew": 8989
+    },
+    ".theatre": {
+      "reg": 77097,
+      "renew": 80124
+    },
+    ".theater": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".tienda": {
+      "reg": 7097,
+      "renew": 7097
+    },
+    ".tickets": {
+      "reg": 54395,
+      "renew": 58935
+    },
+    ".tips": {
+      "reg": 1559,
+      "renew": 3616
+    },
+    ".tires": {
+      "reg": 816,
+      "renew": 11865
+    },
+    ".town": {
+      "reg": 1037,
+      "renew": 5054
+    },
+    ".toys": {
+      "reg": 2169,
+      "renew": 8838
+    },
+    ".trade": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".training": {
+      "reg": 1559,
+      "renew": 5508
+    },
+    ".vet": {
+      "reg": 5660,
+      "renew": 5660
+    },
+    ".video": {
+      "reg": 1682,
+      "renew": 5780
+    },
+    ".vacations": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".tours": {
+      "reg": 8687,
+      "renew": 8687
+    },
+    ".university": {
+      "reg": 8535,
+      "renew": 8535
+    },
+    ".ventures": {
+      "reg": 8081,
+      "renew": 8081
+    },
+    ".viajes": {
+      "reg": 5660,
+      "renew": 5660
+    },
+    ".villas": {
+      "reg": 8384,
+      "renew": 8384
+    },
+    ".vin": {
+      "reg": 863,
+      "renew": 7022
+    },
+    ".voyage": {
+      "reg": 8081,
+      "renew": 8081
+    },
+    ".win": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".website": {
+      "reg": 362,
+      "renew": 3389
+    },
+    ".wine": {
+      "reg": 863,
+      "renew": 8081
+    },
+    ".vision": {
+      "reg": 5357,
+      "renew": 5357
+    },
+    ".watch": {
+      "reg": 1167,
+      "renew": 5962
+    },
+    ".webcam": {
+      "reg": 1724,
+      "renew": 1724
+    },
+    ".wiki": {
+      "reg": 332,
+      "renew": 3314
+    },
+    ".works": {
+      "reg": 777,
+      "renew": 5357
+    },
+    ".wtf": {
+      "reg": 863,
+      "renew": 4903
+    },
+    ".zone": {
+      "reg": 863,
+      "renew": 5357
+    },
+    ".com.gh": {
+      "reg": 15000,
+      "renew": 15000
+    },
+    ".org.gh": {
+      "reg": 15000,
+      "renew": 15000
+    },
+    ".edu.gh": {
+      "reg": 15000,
+      "renew": 15000
+    },
+    ".ng": {
+      "reg": 3000,
+      "renew": 3000
+    },
+    ".com.ng": {
+      "reg": 600,
+      "renew": 900
+    },
+    ".org.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".mobi.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".i.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".name.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".gov.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".net.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".sch.ng": {
+      "reg": 900,
+      "renew": 900
+    },
+    ".net.in": {
+      "reg": 947.46,
+      "renew": 947.46
+    },
+    ".org.in": {
+      "reg": 947.46,
+      "renew": 947.46
+    },
+    ".firm.in": {
+      "reg": 947.46,
+      "renew": 947.46
+    },
+    ".ind.in": {
+      "reg": 947.46,
+      "renew": 947.46
+    },
+    ".gen.in": {
+      "reg": 947.46,
+      "renew": 947.46
+    },
+    ".co.za": {
+      "reg": 880,
+      "renew": 880
+    },
+    ".net.za": {
+      "reg": 1000,
+      "renew": 1000
+    },
+    ".sa.com": {
+      "reg": 32075.82,
+      "renew": 32075.82
+    },
+    ".za.com": {
+      "reg": 32075.82,
+      "renew": 32075.82
+    },
+    ".io": {
+      "reg": 5205,
+      "renew": 7250
+    },
+    ".co.bi": {
+      "reg": 2600,
+      "renew": 2600
+    },
+    ".org.bi": {
+      "reg": 2600,
+      "renew": 2600
+    },
+    ".bi": {
+      "reg": 4490,
+      "renew": 6090
+    },
+    ".best": {
+      "reg": 514,
+      "renew": 2602
+    },
+    ".info.bi": {
+      "reg": 2600,
+      "renew": 2600
+    },
+    ".com.bi": {
+      "reg": 2600,
+      "renew": 2600
+    },
+    ".or.bi": {
+      "reg": 2600,
+      "renew": 2600
+    },
+    ".com.ug": {
+      "reg": 5700,
+      "renew": 5700
+    },
+    ".org.ug": {
+      "reg": 5700,
+      "renew": 5700
+    },
+    ".or.ug": {
+      "reg": 5700,
+      "renew": 5700
+    },
+    ".cd": {
+      "reg": 16500,
+      "renew": 16500
+    },
+    ".com.cd": {
+      "reg": 16500,
+      "renew": 16500
+    },
+    ".org.cd": {
+      "reg": 16500,
+      "renew": 16500
+    },
+    ".cool": {
+      "reg": 1125,
+      "renew": 5357
+    },
+    ".fun": {
+      "reg": 362,
+      "renew": 4297
+    },
+    ".men": {
+      "reg": 704,
+      "renew": 856
+    },
+    ".law": {
+      "reg": 12773,
+      "renew": 12773
+    },
+    ".app": {
+      "reg": 1370,
+      "renew": 2481
+    },
+    ".aero": {
+      "reg": 13500,
+      "renew": 13500
+    },
+    ".blog": {
+      "reg": 362,
+      "renew": 3389
+    },
+    ".icu": {
+      "reg": 287,
+      "renew": 2172
+    },
+    ".ac.tz": {
+      "reg": 1920,
+      "renew": 1920
+    },
+    ".cn": {
+      "reg": 799,
+      "renew": 799
+    },
+    ".dev": {
+      "reg": 2178,
+      "renew": 2178
+    },
+    ".bet": {
+      "reg": 3669.85,
+      "renew": 3669.85
+    },
+    ".ph": {
+      "reg": 6946,
+      "renew": 6946
+    },
+    ".id": {
+      "reg": 1800,
+      "renew": 1800
+    },
+    ".net.br": {
+      "reg": 2000,
+      "renew": 2000
+    },
+    ".cc": {
+      "reg": 514,
+      "renew": 1422
+    },
+    ".fr": {
+      "reg": 1500,
+      "renew": 1500
+    },
+    ".es": {
+      "reg": 1500,
+      "renew": 1500
+    },
+    ".com.ss": {
+      "reg": 7500,
+      "renew": 7500
+    },
+    ".co.ae": {
+      "reg": 6720,
+      "renew": 6720
+    },
+    ".co.et": {
+      "reg": 6200,
+      "renew": 6200
+    },
+    ".co.mw": {
+      "reg": 9000,
+      "renew": 9000
+    },
+    ".com.sn": {
+      "reg": 2150,
+      "renew": 2150
+    },
+    ".sn": {
+      "reg": 3549,
+      "renew": 3549
+    },
+    ".tz": {
+      "reg": 5410,
+      "renew": 5410
+    },
+    ".co.bw": {
+      "reg": 6950,
+      "renew": 6950
+    },
+    ".org.bw": {
+      "reg": 6950,
+      "renew": 6950
+    },
+    ".net.bw": {
+      "reg": 6950,
+      "renew": 6950
+    },
+    ".org.ss": {
+      "reg": 7500,
+      "renew": 7500
+    },
+    ".kids": {
+      "reg": 2935,
+      "renew": 2935
+    },
+    ".lat": {
+      "reg": 211,
+      "renew": 3995
+    },
+    ".et": {
+      "reg": 12000,
+      "renew": 12000
+    },
+    ".cam": {
+      "reg": 1270,
+      "renew": 2557
+    },
+    ".mw": {
+      "reg": 8500,
+      "renew": 8500
+    },
+    ".net.cd": {
+      "reg": 16500,
+      "renew": 16500
+    },
+    ".uk": {
+      "reg": 892,
+      "renew": 892
+    },
+    ".co.uk": {
+      "reg": 1600,
+      "renew": 1600
+    },
+    ".ug": {
+      "reg": 5700,
+      "renew": 5700
+    },
+    ".rw": {
+      "reg": 3100,
+      "renew": 3100
+    },
+    ".org.rw": {
+      "reg": 1800,
+      "renew": 1800
+    },
+    ".net.rw": {
+      "reg": 1800,
+      "renew": 1800
+    },
+    ".org.so": {
+      "reg": 9500,
+      "renew": 9500
+    },
+    ".com.so": {
+      "reg": 9500,
+      "renew": 9500
+    },
+    ".de": {
+      "reg": 816,
+      "renew": 816
+    },
+    ".durban": {
+      "reg": 32075.82,
+      "renew": 32075.82
+    },
+    ".org.za": {
+      "reg": 880,
+      "renew": 880
+    },
+    ".ag": {
+      "reg": 6719,
+      "renew": 12016
+    },
+    ".auto": {
+      "reg": 302611,
+      "renew": 332731
+    },
+    ".autos": {
+      "reg": 211,
+      "renew": 1951
+    },
+    ".car": {
+      "reg": 302611,
+      "renew": 332731
+    },
+    ".cars": {
+      "reg": 302611,
+      "renew": 332731
+    },
+    ".ceo": {
+      "reg": 1452,
+      "renew": 12016
+    },
+    ".cv": {
+      "reg": 1422,
+      "renew": 1422
+    },
+    ".dealer": {
+      "reg": 41531,
+      "renew": 317596
+    },
+    ".diy": {
+      "reg": 725,
+      "renew": 5962
+    },
+    ".food": {
+      "reg": 725,
+      "renew": 5962
+    },
+    ".forum": {
+      "reg": 725,
+      "renew": 5205
+    },
+    ".lifestyle": {
+      "reg": 725,
+      "renew": 5962
+    },
+    ".living": {
+      "reg": 725,
+      "renew": 5962
+    },
+    ".my": {
+      "reg": 362,
+      "renew": 4449
+    },
+    ".ae": {
+      "reg": 4200,
+      "renew": 4200
+    }
+  }
+}

@@ -151,8 +151,9 @@ export async function checkTrueHostAvailability(domains: string[]): Promise<True
         // Unknown shape — throw so caller can handle fallback
         throw new Error('Unexpected WHMCS domain check response shape');
     } catch (err) {
-      console.warn('WHMCS domain check failed, falling back to Bearer API or other methods:', err);
-      // Fall through to Bearer-style API if configured
+      // WHMCS credentials were configured but the call failed.
+      // Re-throw so the caller (domain-api.ts) can fall back to the local price table.
+      throw err;
     }
   }
 
