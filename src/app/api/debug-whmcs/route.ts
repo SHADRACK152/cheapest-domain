@@ -6,6 +6,7 @@ async function callWhmcs(action: string, extra: Record<string, string> = {}) {
   const identifier = process.env.TRUEHOST_IDENTIFIER;
   const secret = process.env.TRUEHOST_SECRET;
   const endpoint = process.env.TRUEHOST_ENDPOINT;
+  const accesskey = process.env.TRUEHOST_ACCESSKEY;
 
   if (!identifier || !secret || !endpoint) {
     return { error: 'Credentials not set', identifier: !!identifier, secret: !!secret, endpoint };
@@ -16,6 +17,7 @@ async function callWhmcs(action: string, extra: Record<string, string> = {}) {
     secret,
     action,
     responsetype: 'json',
+    ...(accesskey ? { accesskey } : {}),
     ...extra,
   });
 
@@ -65,6 +67,7 @@ export async function GET(req: Request) {
     serverEnv: {
       hasIdentifier: !!process.env.TRUEHOST_IDENTIFIER,
       hasSecret: !!process.env.TRUEHOST_SECRET,
+      hasAccesskey: !!process.env.TRUEHOST_ACCESSKEY,
       endpoint: process.env.TRUEHOST_ENDPOINT ?? null,
     },
     domainCheck,

@@ -48,6 +48,9 @@ async function callWhmcsApi(action: string, params: Record<string, any> = {}) {
   body.append('secret', secret);
   body.append('action', action);
   body.append('responsetype', 'json');
+  // accesskey is required by some WHMCS configurations (TrueHost)
+  const accesskey = process.env.TRUEHOST_ACCESSKEY;
+  if (accesskey) body.append('accesskey', accesskey);
 
   Object.entries(params).forEach(([k, v]) => {
     if (v === undefined || v === null) return;
