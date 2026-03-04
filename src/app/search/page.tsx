@@ -152,6 +152,7 @@ function SearchContent() {
   const [error, setError] = useState<string | null>(null);
   const [filterExt, setFilterExt] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'price' | 'name'>('price');
+  const { currency } = useCurrency();
 
   useEffect(() => {
     if (query) {
@@ -319,10 +320,14 @@ function SearchContent() {
                         {results.exact.available && (
                           <div className="flex items-center gap-4">
                             <div className="text-right">
+                              {/* Use currency context and format helpers so KES is shown by default */}
                               <p className="text-2xl font-bold text-primary-600">
-                                ${results.exact.price.toFixed(2)}
+                                {formatPrice(results.exact.price, results.exact.priceKES || convertUSDtoKES(results.exact.price), currency)}
                               </p>
                               <p className="text-sm text-gray-500">per year</p>
+                              {results.exact.renewPriceKES && (
+                                <p className="text-xs text-gray-400">Renewal: KES {results.exact.renewPriceKES}</p>
+                              )}
                             </div>
                             <Button size="lg" className="flex-shrink-0 h-12 px-6">
                               <ShoppingCart className="h-5 w-5 mr-2" />
