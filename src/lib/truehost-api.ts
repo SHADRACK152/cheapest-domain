@@ -56,11 +56,31 @@ async function callWhmcsApi(action: string, params: Record<string, any> = {}) {
 
   const resp = await fetch(endpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'User-Agent': 'Mozilla/5.0 (compatible; CheapestDomains/1.0; +https://cheapestdomains.co.ke)',
+      'Referer': 'https://truehost.co.ke/cloud/',
+      'Origin': 'https://cheapestdomains.co.ke',
+      'Cache-Control': 'no-cache',
+    },
     body: body.toString(),
+    redirect: 'follow',
   });
 
   const text = await resp.text().catch(() => '');
+
+  // Detect Cloudflare bot challenge (returned as HTML even with 403/503)
+  if (
+    resp.status === 403 ||
+    (resp.status >= 400 && text.includes('Just a moment')) ||
+    text.includes('cf-browser-verification') ||
+    text.includes('cloudflare')
+  ) {
+    throw new Error(`CLOUDFLARE_BLOCK: TrueHost endpoint is protected by Cloudflare (HTTP ${resp.status}). Please ask TrueHost to whitelist the API path or disable Bot Fight Mode for /cloud/includes/api/`);
+  }
+
   let json: any = null;
   try { json = text ? JSON.parse(text) : null; } catch { json = null; }
 
@@ -70,7 +90,7 @@ async function callWhmcsApi(action: string, params: Record<string, any> = {}) {
   }
 
   if (!resp.ok) {
-    throw new Error(`WHMCS API ${action} failed: ${resp.status} ${resp.statusText} ${text}`);
+    throw new Error(`WHMCS API ${action} failed: ${resp.status} ${resp.statusText} ${text.slice(0, 200)}`);
   }
 
   return json ?? text;

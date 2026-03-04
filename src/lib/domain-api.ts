@@ -87,15 +87,30 @@ export async function searchDomain(query: string): Promise<SearchResult> {
     throw new Error('Invalid domain name');
   }
 
-  // Priority 1: Use TrueHost API (native integration for TrueHost ecosystem)
+  // Priority 1: TrueHost WHMCS/Bearer API — live prices direct from TrueHost
   if (USE_TRUEHOST) {
     try {
       const { searchTrueHostDomains } = await import('./truehost-api');
       return await searchTrueHostDomains(query);
     } catch (error) {
-      console.error('TrueHost API failed, falling back to free DNS check:', error);
-      // Fall through to free DNS checking
+      const msg = (error as Error).message;
+      if (msg.startsWith('CLOUDFLARE_BLOCK')) {
+        // Cloudflare is blocking the request — log once clearly, don't spam
+        console.warn('[TrueHost] WHMCS API blocked by Cloudflare. Using local TrueHost KES price table until TrueHost whitelists the API endpoint.');
+      } else {
+        console.warn('[TrueHost] WHMCS API error:', msg);
+      }
+      // Fall through to truehost-fetcher which has accurate TrueHost KES prices + real DNS availability
     }
+  }
+
+  // Priority 2: TrueHost fetcher — hardcoded TrueHost Kenya KES prices + real DNS availability checks
+  // This is the accurate TrueHost pricing even when the live API is unavailable
+  try {
+    const { fetchTrueHostResults } = await import('./truehost-fetcher');
+    return await fetchTrueHostResults(query);
+  } catch (error) {
+    console.warn('[TrueHost] Local fetcher failed, falling back to generic DNS check:', (error as Error).message);
   }
 
   // Priority 2: Use Namecheap API (if configured)
