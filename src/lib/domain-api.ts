@@ -117,15 +117,24 @@ export async function searchDomain(query: string): Promise<SearchResult> {
     const exact = availabilityResults.find(r => r.domain === `${domainName}${extension}`);
     const extensionInfo = DOMAIN_EXTENSIONS.find(ext => ext.extension === extension);
 
-    const exactDomain: Domain | null = exact ? {
-      name: domainName,
-      extension: extension,
-      fullDomain: exact.domain,
-      price: exact.premiumPrice || extensionInfo?.price || 8.99,
-      renewPrice: extensionInfo?.renewPrice || 12.99,
-      available: exact.available,
-      premium: !!exact.premiumPrice,
-    } : null;
+    const exactDomain: Domain | null = exact ? (() => {
+      const usdBase = exact.premiumPrice ?? extensionInfo?.price ?? 8.99;
+      const usdRenew = extensionInfo?.renewPrice ?? 12.99;
+      const priceKES = usdToKes(usdBase);
+      const renewKES = usdToKes(usdRenew);
+      return {
+        name: domainName,
+        extension: extension,
+        fullDomain: exact.domain,
+        price: priceKES,
+        renewPrice: renewKES,
+        priceKES,
+        renewPriceKES: renewKES,
+        currency: 'KES',
+        available: exact.available,
+        premium: !!exact.premiumPrice,
+      } as Domain;
+    })() : null;
 
     // Categorize suggestions
     const suggestions: Domain[] = [];
@@ -136,15 +145,24 @@ export async function searchDomain(query: string): Promise<SearchResult> {
       if (result.domain === `${domainName}${extension}`) return; // Skip exact match
 
       const ext = DOMAIN_EXTENSIONS.find(e => result.domain.endsWith(e.extension));
-      const domain: Domain = {
-        name: domainName,
-        extension: ext?.extension || extension,
-        fullDomain: result.domain,
-        price: result.premiumPrice || ext?.price || 8.99,
-        renewPrice: ext?.renewPrice || 12.99,
-        available: result.available,
-        premium: !!result.premiumPrice,
-      };
+      const domain: Domain = (() => {
+          const usdBase = result.premiumPrice ?? ext?.price ?? 8.99;
+          const usdRenew = ext?.renewPrice ?? 12.99;
+          const priceKES = usdToKes(usdBase);
+          const renewKES = usdToKes(usdRenew);
+          return {
+            name: domainName,
+            extension: ext?.extension || extension,
+            fullDomain: result.domain,
+            price: priceKES,
+            renewPrice: renewKES,
+            priceKES,
+            renewPriceKES: renewKES,
+            currency: 'KES',
+            available: result.available,
+            premium: !!result.premiumPrice,
+          };
+        })();
 
       if (result.premiumPrice) {
         premium.push(domain);

@@ -8,6 +8,7 @@ export interface Domain {
   premium: boolean;
   priceKES?: number; // Price in Kenyan Shillings
   renewPriceKES?: number; // Renewal price in KES
+  currency?: 'KES' | 'USD';
 }
 
 export interface DomainExtension {

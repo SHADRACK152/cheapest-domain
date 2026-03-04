@@ -1,5 +1,6 @@
 import { Domain, SearchResult } from '@/types';
 import { DOMAIN_EXTENSIONS } from './constants';
+import { ensureKes, usdToKes } from './currency';
 
 /**
  * TrueHost Domain API Integration
@@ -286,15 +287,24 @@ export async function searchTrueHostDomains(query: string): Promise<SearchResult
     const exact = availabilityResults.find(r => r.domain === `${domainName}${extension}`);
     const extensionInfo = DOMAIN_EXTENSIONS.find(ext => ext.extension === extension);
 
-    const exactDomain: Domain | null = exact ? {
-      name: domainName,
-      extension: extension,
-      fullDomain: exact.domain,
-      price: exact.price || extensionInfo?.price || 8.99,
-      renewPrice: extensionInfo?.renewPrice || 12.99,
-      available: exact.available,
-      premium: exact.premium || false,
-    } : null;
+    const exactDomain: Domain | null = exact ? (() => {
+      const baseUsd = exact.price ?? extensionInfo?.price ?? 8.99;
+      const renewUsd = extensionInfo?.renewPrice ?? 12.99;
+      const priceKES = ensureKes(exact.price, baseUsd);
+      const renewKES = ensureKes(undefined, renewUsd);
+      return {
+        name: domainName,
+        extension: extension,
+        fullDomain: exact.domain,
+        price: priceKES,
+        renewPrice: renewKES,
+        priceKES,
+        renewPriceKES: renewKES,
+        currency: 'KES',
+        available: exact.available,
+        premium: exact.premium || false,
+      } as Domain;
+    })() : null;
 
     // Categorize suggestions
     const suggestions: Domain[] = [];
@@ -305,12 +315,19 @@ export async function searchTrueHostDomains(query: string): Promise<SearchResult
       if (result.domain === `${domainName}${extension}`) return; // Skip exact match
 
       const ext = DOMAIN_EXTENSIONS.find(e => result.domain.endsWith(e.extension));
+      const usdPrice = result.price ?? ext?.price ?? 8.99;
+      const usdRenew = ext?.renewPrice ?? 12.99;
+      const priceKES = ensureKes(result.price, usdPrice);
+      const renewKES = ensureKes(undefined, usdRenew);
       const domain: Domain = {
         name: domainName,
         extension: ext?.extension || extension,
         fullDomain: result.domain,
-        price: result.price || ext?.price || 8.99,
-        renewPrice: ext?.renewPrice || 12.99,
+        price: priceKES,
+        renewPrice: renewKES,
+        priceKES,
+        renewPriceKES: renewKES,
+        currency: 'KES',
         available: result.available,
         premium: result.premium || false,
       };

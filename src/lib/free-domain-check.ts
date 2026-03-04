@@ -1,5 +1,6 @@
 import { Domain, SearchResult } from '@/types';
 import { DOMAIN_EXTENSIONS } from './constants';
+import { usdToKes } from './currency';
 
 /**
  * Free domain availability checker using DNS lookup
@@ -103,8 +104,11 @@ export async function searchDomainWithFreeCheck(query: string): Promise<SearchRe
     name: domainName,
     extension: extension,
     fullDomain: exactDomain,
-    price: basePrice,
-    renewPrice: baseRenewPrice,
+    price: usdToKes(basePrice),
+    renewPrice: usdToKes(baseRenewPrice),
+    priceKES: usdToKes(basePrice),
+    renewPriceKES: usdToKes(baseRenewPrice),
+    currency: 'KES',
     available: exactAvailable,
     premium: false,
   };
@@ -125,8 +129,11 @@ export async function searchDomainWithFreeCheck(query: string): Promise<SearchRe
       name: domainName,
       extension: ext.extension,
       fullDomain,
-      price: ext.price,
-      renewPrice: ext.renewPrice,
+      price: usdToKes(ext.price),
+      renewPrice: usdToKes(ext.renewPrice),
+      priceKES: usdToKes(ext.price),
+      renewPriceKES: usdToKes(ext.renewPrice),
+      currency: 'KES',
       available,
       premium: false,
     };
@@ -157,8 +164,11 @@ export async function searchDomainWithFreeCheck(query: string): Promise<SearchRe
         name: suggestedName,
         extension: suggestedExt,
         fullDomain: `${suggestedName}${suggestedExt}`,
-        price: ext.price,
-        renewPrice: ext.renewPrice,
+        price: usdToKes(ext.price),
+        renewPrice: usdToKes(ext.renewPrice),
+        priceKES: usdToKes(ext.price),
+        renewPriceKES: usdToKes(ext.renewPrice),
+        currency: 'KES',
         available: true, // Assume available for suggestions
         premium: false,
       });
