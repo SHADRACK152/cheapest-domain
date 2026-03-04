@@ -1,6 +1,6 @@
 import { Domain, SearchResult } from '@/types';
 import { DOMAIN_EXTENSIONS } from './constants';
-import { ensureKes, usdToKes } from './currency';
+import { ensureKes, kesToUsd, usdToKes } from './currency';
 
 /**
  * TrueHost Domain API Integration
@@ -296,8 +296,8 @@ export async function searchTrueHostDomains(query: string): Promise<SearchResult
         name: domainName,
         extension: extension,
         fullDomain: exact.domain,
-        price: priceKES,
-        renewPrice: renewKES,
+        price: kesToUsd(priceKES),
+        renewPrice: kesToUsd(renewKES),
         priceKES,
         renewPriceKES: renewKES,
         currency: 'KES',
@@ -323,8 +323,8 @@ export async function searchTrueHostDomains(query: string): Promise<SearchResult
         name: domainName,
         extension: ext?.extension || extension,
         fullDomain: result.domain,
-        price: priceKES,
-        renewPrice: renewKES,
+        price: kesToUsd(priceKES),
+        renewPrice: kesToUsd(renewKES),
         priceKES,
         renewPriceKES: renewKES,
         currency: 'KES',
