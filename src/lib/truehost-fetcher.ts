@@ -8,8 +8,7 @@
 
 import { Domain, SearchResult } from '@/types';
 import { DOMAIN_EXTENSIONS } from './constants';
-import * as fs from 'fs';
-import * as path from 'path';
+import tldPricesData from '../../data/tld-prices.json';
 
 /**
  * Currency conversion utilities
@@ -26,30 +25,9 @@ export function convertKEStoUSD(kes: number): number {
   return Math.round(kes * KES_TO_USD_RATE * 100) / 100;
 }
 
-/**
- * Load WHMCS TLD prices from data/tld-prices.json (already in KES).
- * Refresh with: node scripts/fetch-whmcs-prices.js
- */
-function loadCachedPrices(): Record<string, { reg: number; renew: number }> {
-  try {
-    const filePath = path.join(process.cwd(), 'data', 'tld-prices.json');
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    if (data?.tlds && typeof data.tlds === 'object') return data.tlds;
-  } catch {}
-  // Minimal fallback if JSON file is missing
-  return {
-    '.com':   { reg: 1200, renew: 1600 },
-    '.co.ke': { reg: 999,  renew: 1200 },
-    '.ke':    { reg: 3000, renew: 3000 },
-    '.net':   { reg: 1856, renew: 2010 },
-    '.org':   { reg: 1200, renew: 1500 },
-    '.io':    { reg: 4500, renew: 5500 },
-    '.africa':{ reg: 1800, renew: 2000 },
-  };
-}
-
-const TLD_PRICES = loadCachedPrices();
-console.log(`[TrueHost] Loaded ${Object.keys(TLD_PRICES).length} TLD prices`);
+// TLD prices loaded directly from the committed WHMCS price cache (already in KES)
+// Refresh with: node scripts/fetch-whmcs-prices.js then commit data/tld-prices.json
+const TLD_PRICES = tldPricesData.tlds as Record<string, { reg: number; renew: number }>;
 
 function getRegPriceKES(extension: string): number {
   return TLD_PRICES[extension]?.reg ?? 1500;
