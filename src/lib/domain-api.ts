@@ -1,8 +1,8 @@
 import { Domain, SearchResult } from '@/types';
 import { DOMAIN_EXTENSIONS } from './constants';
 
-// Priority: TrueHost API > Namecheap API > Free DNS Checking
-const USE_TRUEHOST = !!process.env.TRUEHOST_API_KEY;
+// Priority: TrueHost API (Bearer) or WHMCS-style credentials > Namecheap API > Free DNS Checking
+const USE_TRUEHOST = !!process.env.TRUEHOST_API_KEY || (!!process.env.TRUEHOST_IDENTIFIER && !!process.env.TRUEHOST_SECRET && !!process.env.TRUEHOST_ENDPOINT);
 const USE_NAMECHEAP = !!process.env.NAMECHEAP_API_KEY;
 
 interface NamecheapAvailability {

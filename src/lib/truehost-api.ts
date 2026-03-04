@@ -30,18 +30,114 @@ interface TrueHostApiResponse {
 }
 
 /**
+ * Generic WHMCS-style API caller (Identifier + Secret)
+ * Posts form-urlencoded data to the provided endpoint with `action` and `responsetype=json`.
+ */
+async function callWhmcsApi(action: string, params: Record<string, any> = {}) {
+  const identifier = process.env.TRUEHOST_IDENTIFIER;
+  const secret = process.env.TRUEHOST_SECRET;
+  const endpoint = process.env.TRUEHOST_ENDPOINT;
+
+  if (!identifier || !secret || !endpoint) {
+    throw new Error('WHMCS credentials not configured (TRUEHOST_IDENTIFIER/TRUEHOST_SECRET/TRUEHOST_ENDPOINT)');
+  }
+
+  const body = new URLSearchParams();
+  body.append('identifier', identifier);
+  body.append('secret', secret);
+  body.append('action', action);
+  body.append('responsetype', 'json');
+
+  Object.entries(params).forEach(([k, v]) => {
+    if (v === undefined || v === null) return;
+    body.append(k, typeof v === 'object' ? JSON.stringify(v) : String(v));
+  });
+
+  const resp = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+
+  const text = await resp.text().catch(() => '');
+  let json: any = null;
+  try { json = text ? JSON.parse(text) : null; } catch { json = null; }
+
+  // WHMCS sometimes returns a JSON body with { result: 'error', message: '...' }
+  if (json && json.result === 'error') {
+    return json; // let caller handle error shape
+  }
+
+  if (!resp.ok) {
+    throw new Error(`WHMCS API ${action} failed: ${resp.status} ${resp.statusText} ${text}`);
+  }
+
+  return json ?? text;
+}
+
+/**
  * Check domain availability using TrueHost API
  */
 export async function checkTrueHostAvailability(domains: string[]): Promise<TrueHostDomainCheck[]> {
   const apiKey = process.env.TRUEHOST_API_KEY;
   const apiUrl = process.env.TRUEHOST_API_URL || 'https://api.truehost.co.ke/v1';
 
+  // Prefer WHMCS-style credentials if provided
+  if (process.env.TRUEHOST_IDENTIFIER && process.env.TRUEHOST_SECRET && process.env.TRUEHOST_ENDPOINT) {
+    try {
+      // Try a WHMCS-style domain check action. Common WHMCS action names vary by provider;
+      // we'll attempt a flexible sequence and parse common response shapes.
+      const joined = domains.join(',');
+        const resp = await callWhmcsApi('DomainCheck', { domain: joined, domains: joined });
+
+        // If WHMCS returned an error payload, surface it as a specific error
+        if (resp && resp.result === 'error') {
+          const msg = String(resp.message || resp?.error || 'WHMCS API error');
+          if (msg.toLowerCase().includes('invalid ip')) {
+            throw new Error(`WHMCS_INVALID_IP: ${msg}`);
+          }
+          throw new Error(`WHMCS_ERROR: ${msg}`);
+        }
+
+        // Attempt to find domain data in common locations
+        const payload = resp?.data || resp?.domains || resp || null;
+
+        // If payload is an object keyed by domain names
+        if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+          const out: TrueHostDomainCheck[] = domains.map(d => {
+            const info = payload[d] || payload[d.toLowerCase()] || {};
+            const available = info.available ?? info.is_available ?? (info.status === 'available') ?? (info === 'available');
+            const price = info.price ?? info.registration_price ?? info.reg_price ?? undefined;
+            const premium = info.premium ?? info.is_premium ?? false;
+            return { domain: d, available: Boolean(available), price, premium };
+          });
+          return out;
+        }
+
+        // If payload is an array of records
+        if (Array.isArray(payload)) {
+          return payload.map((p: any) => ({
+            domain: p.domain || p.name,
+            available: Boolean(p.available ?? p.is_available ?? (p.status === 'available')),
+            price: p.price ?? p.registration_price,
+            premium: Boolean(p.premium ?? p.is_premium),
+          }));
+        }
+
+        // Unknown shape — throw so caller can handle fallback
+        throw new Error('Unexpected WHMCS domain check response shape');
+    } catch (err) {
+      console.warn('WHMCS domain check failed, falling back to Bearer API or other methods:', err);
+      // Fall through to Bearer-style API if configured
+    }
+  }
+
   if (!apiKey) {
-    throw new Error('TrueHost API key not configured. Add TRUEHOST_API_KEY to .env.local');
+    throw new Error('TrueHost API key not configured. Add TRUEHOST_API_KEY or WHMCS credentials to environment');
   }
 
   try {
-    // Build the API request
+    // Build the API request (Bearer-style)
     const response = await fetch(`${apiUrl}/domains/check`, {
       method: 'POST',
       headers: {
@@ -49,9 +145,7 @@ export async function checkTrueHostAvailability(domains: string[]): Promise<True
         'Authorization': `Bearer ${apiKey}`,
         'Accept': 'application/json',
       },
-      body: JSON.stringify({
-        domains: domains,
-      }),
+      body: JSON.stringify({ domains }),
     });
 
     if (!response.ok) {
@@ -77,6 +171,58 @@ export async function checkTrueHostAvailability(domains: string[]): Promise<True
 export async function getTrueHostPricing(extension: string): Promise<{ price: number; renewPrice: number } | null> {
   const apiKey = process.env.TRUEHOST_API_KEY;
   const apiUrl = process.env.TRUEHOST_API_URL || 'https://api.truehost.co.ke/v1';
+
+  // WHMCS-style pricing via Identifier/Secret
+  if (process.env.TRUEHOST_IDENTIFIER && process.env.TRUEHOST_SECRET && process.env.TRUEHOST_ENDPOINT) {
+    try {
+      // Try common WHMCS actions to retrieve pricing. Providers differ; we attempt a generic "GetTLDs"/"GetTLDPricing" action.
+      const actions = ['GetTLDPricing', 'GetTLDs', 'GetTLDList', 'gettldpricing', 'gettlds'];
+      for (const action of actions) {
+        try {
+          const resp = await callWhmcsApi(action, {});
+
+          // If WHMCS returned an error payload, surface it
+          if (resp && resp.result === 'error') {
+            const msg = String(resp.message || resp?.error || 'WHMCS API error');
+            if (msg.toLowerCase().includes('invalid ip')) {
+              throw new Error(`WHMCS_INVALID_IP: ${msg}`);
+            }
+            throw new Error(`WHMCS_ERROR: ${msg}`);
+          }
+
+          const payload = resp?.data || resp?.tlds || resp;
+          if (!payload) continue;
+
+          // If array
+          if (Array.isArray(payload)) {
+            const match = payload.find((p: any) => (p.tld || p.extension || p.name) === extension || (`.${p.tld}` || p.extension) === extension);
+            if (match) {
+              const price = match.registration_price ?? match.price ?? match.reg_price ?? match.cost ?? 0;
+              const renew = match.renewal_price ?? match.renew_price ?? price;
+              return { price, renewPrice: renew };
+            }
+          }
+
+          // If object keyed by tld
+          if (typeof payload === 'object') {
+            for (const key of Object.keys(payload)) {
+              const entry = payload[key];
+              const keyNormalized = key.startsWith('.') ? key : `.${key}`;
+              if (keyNormalized === extension) {
+                const price = entry.registration_price ?? entry.price ?? entry.reg_price ?? entry.cost ?? 0;
+                const renew = entry.renewal_price ?? entry.renew_price ?? price;
+                return { price, renewPrice: renew };
+              }
+            }
+          }
+        } catch (e) {
+          // try next action
+        }
+      }
+    } catch (err) {
+      console.warn('WHMCS pricing lookup failed, falling back to Bearer API or defaults:', err);
+    }
+  }
 
   if (!apiKey) {
     return null;

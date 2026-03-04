@@ -1,34 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchTrueHostResults } from '@/lib/truehost-fetcher';
+import { searchDomain } from '@/lib/domain-api';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q');
 
   if (!query) {
-    return NextResponse.json(
-      { error: 'Missing query parameter "q"' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Missing query parameter "q"' }, { status: 400 });
   }
 
   try {
-    // Fetch domain search results from TrueHost Kenya
-    const results = await fetchTrueHostResults(query);
+    // Use central searchDomain which prefers TrueHost API (or WHMCS creds) then falls back
+    const results = await searchDomain(query);
 
-    return NextResponse.json({
-      success: true,
-      query,
-      data: results,
-      source: 'truehost',
-    });
+    return NextResponse.json({ success: true, query, data: results, source: 'domain-service' });
   } catch (error) {
     console.error('Search domain error:', error);
     return NextResponse.json(
-      { 
-        error: 'Failed to check domain availability', 
+      {
+        error: 'Failed to check domain availability',
         message: error instanceof Error ? error.message : 'Unknown error',
-        query 
+        query,
       },
       { status: 500 }
     );
