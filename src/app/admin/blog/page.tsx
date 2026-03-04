@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
@@ -354,12 +355,13 @@ export default function AdminBlogPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
                         {/* Thumbnail */}
-                        <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
+                        <div className="relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
                           {post.featuredImage ? (
-                            <img 
+                            <Image 
                               src={post.featuredImage} 
                               alt={post.title}
-                              className="w-full h-full object-cover"
+                              fill
+                              className="object-cover"
                             />
                           ) : (
                             <div className={cn(

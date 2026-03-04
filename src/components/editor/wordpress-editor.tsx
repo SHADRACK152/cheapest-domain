@@ -169,7 +169,8 @@ export default function WordPressEditor({ value, onChange, placeholder, classNam
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Upload failed');
 
-      const img = `<img src="${data.url}" alt="Uploaded image" style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px;" />`;
+      // eslint-disable-next-line @next/next/no-img-element
+      const img = `<img src="${data.url}" alt="Uploaded image" style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px;" />`;  // raw HTML for editor content
       document.execCommand('insertHTML', false, img);
       handleInput();
     } catch (error) {

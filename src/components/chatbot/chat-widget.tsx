@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MessageCircle, 
@@ -101,7 +102,7 @@ export function ChatWidget() {
               <div className="flex items-center gap-3">
                 <div className="bg-white/20 rounded-full p-1">
                   <div className="bg-white rounded-full shadow-sm border border-gray-100 p-0.5">
-                    <img src="/image.png" alt="Kaya" className="h-7 w-7 rounded-full object-cover" />
+                    <Image src="/image.png" alt="Kaya" width={28} height={28} className="rounded-full object-cover" />
                   </div>
                 </div>
                 <div>

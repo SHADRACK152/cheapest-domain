@@ -1,6 +1,6 @@
 // Simple currency conversion utilities for the app
 // Exchange rate: 1 USD = 150 KES (adjust if needed)
-export const USD_TO_KES_RATE = 150;
+export const USD_TO_KES_RATE = 130;
 export const KES_TO_USD_RATE = 1 / USD_TO_KES_RATE;
 
 export function usdToKes(usd: number): number {

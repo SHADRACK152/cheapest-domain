@@ -1,6 +1,7 @@
  'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, ArrowRight, TrendingUp, Bookmark, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -220,9 +221,9 @@ export default function BlogPage() {
               >
                 <Link href={`/blog/${featuredPostFromFiltered.slug}`}>
                   <div className="flex gap-6 items-center bg-white rounded-xl border border-slate-200 overflow-hidden p-6 hover:shadow-lg transition">
-                    <div className="w-44 h-28 flex-shrink-0 overflow-hidden rounded-md bg-slate-100">
+                    <div className="relative w-44 h-28 flex-shrink-0 overflow-hidden rounded-md bg-slate-100">
                       {featuredPostFromFiltered.featuredImage ? (
-                        <img src={featuredPostFromFiltered.featuredImage} alt={featuredPostFromFiltered.title} className="w-full h-full object-cover" />
+                        <Image src={featuredPostFromFiltered.featuredImage} alt={featuredPostFromFiltered.title} fill className="object-cover" />
                       ) : (
                         <div className={cn('w-full h-full', categoryGradients[featuredPostFromFiltered.category])} />
                       )}
@@ -257,9 +258,9 @@ export default function BlogPage() {
                 pagePosts.map((post) => (
                   <article key={post.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden p-5 hover:shadow-md transition">
                     <div className="flex gap-4 items-start">
-                      <div className="w-36 h-24 flex-shrink-0 overflow-hidden rounded-md bg-slate-100">
+                      <div className="relative w-36 h-24 flex-shrink-0 overflow-hidden rounded-md bg-slate-100">
                         {post.featuredImage ? (
-                          <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" />
+                          <Image src={post.featuredImage} alt={post.title} fill className="object-cover" />
                         ) : (
                           <div className={cn('w-full h-full', categoryGradients[post.category])} />
                         )}

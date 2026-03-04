@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, use, useRef } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, ArrowLeft, User, Share2, Twitter, Linkedin, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -225,11 +226,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
           {/* Featured Image */}
           {post.featuredImage && (
-            <div className="w-full h-[400px] overflow-hidden">
-              <img 
+            <div className="relative w-full h-[400px] overflow-hidden">
+              <Image 
                 src={post.featuredImage} 
                 alt={post.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
           )}

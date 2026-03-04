@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { Globe, Menu, X, ShoppingCart, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NAV_ITEMS } from '@/lib/constants';
@@ -55,7 +56,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary-600 transition-transform duration-200 group-hover:scale-105 overflow-hidden shadow-sm border border-gray-100">
-            <img src="/image.png" alt="CheapestDomains" className="h-10 w-10 object-cover" />
+            <Image src="/image.png" alt="CheapestDomains" width={40} height={40} className="object-cover" />
           </div>
           <span className="text-lg font-bold text-[#111111]">
             Cheapest<span className="text-primary-600">Domains</span>

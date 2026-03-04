@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, Suspense } from 'react';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 
@@ -113,7 +114,7 @@ export default function BlogEditor() {
 
             {featuredImage && (
               <div className="mt-4">
-                <img src={featuredImage} alt="featured" className="w-full rounded" />
+                <Image src={featuredImage} alt="featured" width={800} height={400} className="w-full rounded" />
               </div>
             )}
           </div>

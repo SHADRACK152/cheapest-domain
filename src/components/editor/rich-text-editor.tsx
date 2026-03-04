@@ -98,7 +98,8 @@ export default function RichTextEditor({ value, onChange, placeholder, className
       }
 
       // Insert image into editor
-      const img = `<img src="${data.url}" alt="Uploaded image" style="max-width: 100%; height: auto; margin: 1em 0;" />`;
+      // eslint-disable-next-line @next/next/no-img-element
+      const img = `<img src="${data.url}" alt="Uploaded image" style="max-width: 100%; height: auto; margin: 1em 0;" />`;  // raw HTML for editor content
       document.execCommand('insertHTML', false, img);
       handleInput();
       
