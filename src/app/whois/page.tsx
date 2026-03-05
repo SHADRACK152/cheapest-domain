@@ -90,6 +90,16 @@ function getIanaId(e: RdapEntity) {
   return e.publicIds?.find(p => p.type === 'IANA Registrar ID')?.identifier ?? null;
 }
 
+/** Recursively collect all entities at any depth with a matching role */
+function findEntitiesDeep(entities: RdapEntity[], role: string): RdapEntity[] {
+  const found: RdapEntity[] = [];
+  for (const e of entities) {
+    if (e.roles?.includes(role)) found.push(e);
+    if (e.entities?.length) found.push(...findEntitiesDeep(e.entities, role));
+  }
+  return found;
+}
+
 function Section({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -176,11 +186,11 @@ function WhoisContent() {
   }, []);
 
   const allEntities  = result?.entities ?? [];
-  const registrar    = allEntities.find(e => e.roles.includes('registrar'));
-  const registrant   = allEntities.find(e => e.roles.includes('registrant'));
-  const admin        = allEntities.find(e => e.roles.includes('administrative'));
-  const tech         = allEntities.find(e => e.roles.includes('technical'));
-  const reseller     = allEntities.find(e => e.roles.includes('reseller'));
+  const registrar    = findEntitiesDeep(allEntities, 'registrar')[0];
+  const registrant   = findEntitiesDeep(allEntities, 'registrant')[0];
+  const admin        = findEntitiesDeep(allEntities, 'administrative')[0];
+  const tech         = findEntitiesDeep(allEntities, 'technical')[0];
+  const reseller     = findEntitiesDeep(allEntities, 'reseller')[0];
   const contacts     = [registrar, registrant, admin, tech, reseller].filter(Boolean) as RdapEntity[];
 
   const eventMap: Record<string, string> = {};
