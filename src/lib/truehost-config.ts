@@ -31,7 +31,7 @@ export const TRUEHOST_CONFIG = {
   activeUrl: 'cartRegister' as UrlType,
   
   // Whether to open in new tab or same tab
-  openInNewTab: false,
+  openInNewTab: true,
 };
 
 /**

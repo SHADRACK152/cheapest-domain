@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Check,
@@ -146,6 +146,7 @@ function SearchSkeleton() {
 
 function SearchContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = searchParams.get('q') || '';
   const [results, setResults] = useState<SearchResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -153,6 +154,7 @@ function SearchContent() {
   const [filterExt, setFilterExt] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'price' | 'name'>('price');
   const { currency } = useCurrency();
+  const { addItem } = useCart();
 
   useEffect(() => {
     if (query) {
@@ -329,7 +331,7 @@ function SearchContent() {
                                 <p className="text-xs text-gray-400">Renewal: KES {results.exact.renewPriceKES}</p>
                               )}
                             </div>
-                            <Button size="lg" className="flex-shrink-0 h-12 px-6">
+                            <Button size="lg" className="flex-shrink-0 h-12 px-6" onClick={() => { addItem(results.exact); router.push('/cart'); }}>
                               <ShoppingCart className="h-5 w-5 mr-2" />
                               Register Now
                             </Button>
