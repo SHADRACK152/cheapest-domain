@@ -7,6 +7,9 @@
 # testing
 /coverage
 
+# local test/debug scripts with sensitive data
+scripts/test-whmcs.js
+
 # next.js
 /.next/
 /out/
