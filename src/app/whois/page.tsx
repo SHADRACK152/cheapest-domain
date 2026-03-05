@@ -136,6 +136,7 @@ function WhoisContent() {
   const [isLoading, setIsLoading]   = useState(false);
   const [error, setError]           = useState<string | null>(null);
   const [notFound, setNotFound]     = useState(false);
+  const [lastFetched, setLastFetched] = useState<Date | null>(null);
 
   const doLookup = async (domain: string) => {
     const clean = domain.toLowerCase().trim();
@@ -148,6 +149,7 @@ function WhoisContent() {
       if (res.status === 404) { setNotFound(true); return; }
       if (!res.ok) throw new Error(`RDAP lookup failed (HTTP ${res.status})`);
       setResult(await res.json());
+      setLastFetched(new Date());
     } catch (err) {
       setError((err as Error).message || 'Lookup failed. Please try again.');
     } finally { setIsLoading(false); }
@@ -232,11 +234,28 @@ function WhoisContent() {
                     <h2 className="text-2xl font-bold text-[#111111]">{result.unicodeName || result.ldhName || activeQuery}</h2>
                     {result.handle && <p className="text-xs text-gray-400 mt-1 font-mono">{result.handle}</p>}
                     {result.port43 && <p className="text-xs text-gray-400 mt-0.5">WHOIS: {result.port43}</p>}
+                    {lastFetched && (
+                      <p className="text-xs text-gray-400 mt-1">
+                        Last checked: {lastFetched.toLocaleTimeString('en-KE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                      </p>
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.status?.map(s => (
-                      <span key={s} className={cn('text-xs font-medium px-2.5 py-1 rounded-full border', getStatusColor(s))}>{s}</span>
-                    ))}
+                  <div className="flex flex-col items-end gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1.5 text-xs h-8"
+                      disabled={isLoading}
+                      onClick={() => doLookup(activeQuery)}
+                    >
+                      <RefreshCw className={cn('h-3.5 w-3.5', isLoading && 'animate-spin')} />
+                      Refresh
+                    </Button>
+                    <div className="flex flex-wrap justify-end gap-2">
+                      {result.status?.map(s => (
+                        <span key={s} className={cn('text-xs font-medium px-2.5 py-1 rounded-full border', getStatusColor(s))}>{s}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 {daysLeft !== null && daysLeft <= 60 && (
