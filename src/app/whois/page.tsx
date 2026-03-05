@@ -309,13 +309,22 @@ function WhoisContent() {
               </div>
 
               {/* Contacts */}
-              {contacts.length > 0 && (
-                <Section icon={User} title="Contacts">
-                  <div className="space-y-3">
-                    {contacts.map((e, i) => <ContactCard key={i} entity={e} />)}
-                  </div>
-                </Section>
-              )}
+              <Section icon={User} title="Contacts">
+                <div className="space-y-3">
+                  {contacts.map((e, i) => <ContactCard key={i} entity={e} />)}
+                  {!registrant && !admin && !tech && (
+                    <div className="rounded-xl border border-amber-100 bg-amber-50 p-4 flex items-start gap-3">
+                      <div className="h-5 w-5 mt-0.5 flex-shrink-0 text-amber-500">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 1a9 9 0 100 18A9 9 0 0010 1zm0 14a1 1 0 110-2 1 1 0 010 2zm1-5a1 1 0 10-2 0v-3a1 1 0 102 0v3z" clipRule="evenodd" /></svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-amber-800">Registrant info not available</p>
+                        <p className="text-xs text-amber-700 mt-0.5">The registrar has redacted registrant, administrative, and technical contact details for privacy (GDPR / RDDS policy). Contact the registrar above for ownership queries.</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Section>
 
               {/* Name Servers */}
               {result.nameservers?.length > 0 && (
