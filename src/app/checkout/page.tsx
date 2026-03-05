@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, ShieldCheck, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/cart-context';
+import { getTrueHostUrl } from '@/lib/truehost-config';
 import Link from 'next/link';
 
 export default function CheckoutPage() {
@@ -21,7 +22,10 @@ export default function CheckoutPage() {
     
     // Redirect to TrueHost after a short delay to show the message
     const timer = setTimeout(() => {
-      window.location.href = 'https://truehost.co.ke/cloud//cart.php?a=checkout';
+      const url = items.length === 1
+        ? getTrueHostUrl(items[0].domain.fullDomain)
+        : 'https://truehost.co.ke/cloud/cart.php?a=checkout';
+      window.location.href = url;
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -81,7 +85,12 @@ export default function CheckoutPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               size="lg"
-              onClick={() => window.location.href = 'https://truehost.co.ke/cloud//cart.php?a=checkout'}
+              onClick={() => {
+              const url = items.length === 1
+                ? getTrueHostUrl(items[0].domain.fullDomain)
+                : 'https://truehost.co.ke/cloud/cart.php?a=checkout';
+              window.location.href = url;
+            }}
               className="gap-2"
             >
               Continue to TrueHost

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ShoppingCart, Trash2, ShieldCheck, Plus, Minus, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/cart-context';
+import { getTrueHostUrl } from '@/lib/truehost-config';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -212,8 +213,11 @@ export default function CartPage() {
                   size="lg" 
                   className="w-full mb-3 gap-2"
                   onClick={() => {
-                    // Redirect to TrueHost for checkout
-                    window.location.href = 'https://truehost.co.ke/cloud//cart.php?a=checkout';
+                    // Redirect to TrueHost for checkout with domain query
+                    const url = items.length === 1
+                      ? getTrueHostUrl(items[0].domain.fullDomain)
+                      : 'https://truehost.co.ke/cloud/cart.php?a=checkout';
+                    window.location.href = url;
                   }}
                 >
                   Proceed to Checkout
