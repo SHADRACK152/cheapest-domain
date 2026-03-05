@@ -16,7 +16,7 @@ export const TRUEHOST_CONFIG = {
   urls: {
     // Option 1: Direct cart registration (most common for hosting providers)
     cartRegister: (domain: string) => 
-      `https://truehost.co.ke/cart.php?a=add&domain=register&query=${encodeURIComponent(domain)}`,
+      `https://truehost.co.ke/cloud/cart.php?a=add&domain=register&query=${encodeURIComponent(domain)}`,
     
     // Option 2: Domain search page (if TrueHost has a dedicated search page)
     domainSearch: (domain: string) => 
