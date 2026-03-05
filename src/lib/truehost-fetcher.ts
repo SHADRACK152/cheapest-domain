@@ -270,13 +270,15 @@ async function checkRealDomainAvailability(domain: string): Promise<boolean> {
   // Use RDAP for supported gTLDs — most accurate method
   if (RDAP_SUPPORTED_TLDS.has(ext)) {
     const rdapResult = await checkWithRDAP(domain);
-    if (rdapResult !== null) {
-      return rdapResult;
+    // RDAP says "taken" (false) → trust immediately (very reliable)
+    if (rdapResult === false) return false;
+    // RDAP says "available" (true) or inconclusive (null) → verify with DNS
+    // because RDAP can give false positives for some registries (e.g. .io)
+    if (rdapResult === null) {
+      console.warn(`⚠️  RDAP inconclusive for ${domain}, falling back to DNS`);
     }
-    // RDAP inconclusive (rate-limited / error) — fall through to DNS
-    console.warn(`⚠️  RDAP inconclusive for ${domain}, falling back to DNS`);
   }
 
-  // DNS multi-record check (used for ccTLDs and RDAP fallback)
+  // DNS multi-record check — always run for ccTLDs, and as confirmation for gTLDs
   return checkWithDNS(domain);
 }
