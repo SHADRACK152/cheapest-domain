@@ -199,7 +199,7 @@ function WhoisContent() {
           {isLoading && (
             <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center py-16">
               <Loader2 className="h-10 w-10 animate-spin text-primary-600 mx-auto mb-4" />
-              <p className="text-gray-500">Looking up <strong>{activeQuery}</strong>…</p>
+              <p className="text-gray-500">Looking up <strong>{activeQuery}</strong>...</p>
             </motion.div>
           )}
 
@@ -217,7 +217,7 @@ function WhoisContent() {
               </div>
               <h2 className="text-2xl font-bold text-[#111111] mb-2">{activeQuery}</h2>
               <p className="text-green-600 font-semibold text-lg mb-1">Not Registered</p>
-              <p className="text-gray-400 text-sm mb-6">This domain does not appear to be registered — it may be available!</p>
+              <p className="text-gray-400 text-sm mb-6">This domain does not appear to be registered - it may be available!</p>
               <Button onClick={() => router.push(`/search?q=${encodeURIComponent(activeQuery)}`)}>Check Price &amp; Register</Button>
             </motion.div>
           )}
@@ -260,7 +260,7 @@ function WhoisContent() {
                       <Icon className={cn('h-4 w-4', color)} />
                     </div>
                     <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{label}</p>
-                    <p className="font-semibold text-[#111111] text-sm">{eventMap[key] ? formatDate(eventMap[key]) : '—'}</p>
+                    <p className="font-semibold text-[#111111] text-sm">{eventMap[key] ? formatDate(eventMap[key]) : '-'}</p>
                   </div>
                 ))}
               </div>
@@ -293,12 +293,12 @@ function WhoisContent() {
                 <Section icon={Shield} title="DNSSEC">
                   <Row label="Delegation Signed"
                     value={<span className={result.secureDNS.delegationSigned ? 'text-green-600 font-medium' : 'text-gray-500'}>
-                      {result.secureDNS.delegationSigned ? '? Signed' : '? Not signed'}
+                      {result.secureDNS.delegationSigned ? 'Yes - Signed' : 'No - Not signed'}
                     </span>}
                   />
                   {result.secureDNS.dsData?.map((ds: any, i: number) => (
                     <Row key={i} label={`DS Record ${i + 1}`}
-                      value={<span className="font-mono text-xs">{ds.keytag} {ds.algorithm} {ds.digestType} {String(ds.digest ?? '').slice(0, 24)}…</span>}
+                      value={<span className="font-mono text-xs">{ds.keytag} {ds.algorithm} {ds.digestType} {String(ds.digest ?? '').slice(0, 24)}...</span>}
                     />
                   ))}
                 </Section>
@@ -330,7 +330,7 @@ function WhoisContent() {
 
               <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1.5 pb-4">
                 <Info className="h-3.5 w-3.5" />
-                Data sourced from RDAP — some fields may be redacted for privacy (GDPR/RDDS)
+                Data sourced from RDAP - some fields may be redacted for privacy (GDPR/RDDS)
               </p>
             </motion.div>
           )}
