@@ -67,12 +67,20 @@ function parseVcard(entity: RdapEntity): Record<string, string> {
     for (const field of (entity.vcardArray[1] ?? [])) {
       const [name, , , value] = field;
       if (!name || value == null) continue;
-      if (name === 'fn')    out.name    = String(value);
-      if (name === 'org')   out.org     = Array.isArray(value) ? value.filter(Boolean).join(', ') : String(value);
-      if (name === 'email') out.email   = String(value);
-      if (name === 'tel')   out.phone   = String(value);
-      if (name === 'url')   out.url     = String(value);
-      if (name === 'adr')   out.address = (Array.isArray(value) ? value.filter(Boolean).join(', ') : String(value));
+      if (name === 'fn')    out.name       = String(value);
+      if (name === 'org')   out.org        = Array.isArray(value) ? value.filter(Boolean).join(', ') : String(value);
+      if (name === 'email') out.email      = String(value);
+      if (name === 'tel')   out.phone      = String(value);
+      if (name === 'url')   out.url        = String(value);
+      if (name === 'adr') {
+        // vCard adr: [poBox, extAddr, street, city, state, postalCode, country]
+        const parts = Array.isArray(value) ? value : [];
+        if (parts[2]) out.street     = String(parts[2]);
+        if (parts[3]) out.city       = String(parts[3]);
+        if (parts[4]) out.state      = String(parts[4]);
+        if (parts[5]) out.postalCode = String(parts[5]);
+        if (parts[6]) out.country    = String(parts[6]);
+      }
     }
   } catch { /* ignore */ }
   return out;
@@ -109,6 +117,8 @@ function ContactCard({ entity }: { entity: RdapEntity }) {
   const ianaId = getIanaId(entity);
   const abuse = entity.entities?.find(e => e.roles.includes('abuse'));
   const av = abuse ? parseVcard(abuse) : null;
+  const abuseVcard = abuse;
+  const abuseIanaId = abuseVcard ? getIanaId(abuseVcard) : null;
   const roleLabel = entity.roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(' / ');
   return (
     <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
@@ -119,7 +129,11 @@ function ContactCard({ entity }: { entity: RdapEntity }) {
       <Row label="IANA ID"      value={ianaId ?? undefined} />
       <Row label="Email"        value={v.email ? <a href={`mailto:${v.email}`} className="text-primary-600 hover:underline">{v.email}</a> : undefined} />
       <Row label="Phone"        value={v.phone} />
-      <Row label="Address"      value={v.address} />
+      <Row label="Street"       value={v.street} />
+      <Row label="City"         value={v.city} />
+      <Row label="State"        value={v.state} />
+      <Row label="Postal Code"  value={v.postalCode} />
+      <Row label="Country"      value={v.country} />
       <Row label="URL"          value={v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">{v.url}</a> : undefined} />
       {av?.email && <Row label="Abuse Email" value={<a href={`mailto:${av.email}`} className="text-red-600 hover:underline">{av.email}</a>} />}
       {av?.phone && <Row label="Abuse Phone" value={av.phone} />}
