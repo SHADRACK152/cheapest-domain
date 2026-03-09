@@ -11,13 +11,13 @@ const team = [
     bio: 'Ricky Mark is the founder of CheapestDomains.co.ke, a platform dedicated to helping businesses and individuals easily compare domain registration, renewal, and transfer prices. His goal is to make domain ownership more transparent and affordable by giving users the information they need to choose the best registrar without hidden costs.',
   },
   {
-    initials: 'AO',
+    initials: 'SM',
     name: 'Shadrack Mark emadau',
     role: 'CTO',
     bio: 'Building the infrastructure that powers millions of domains globally.',
   },
   {
-    initials: 'DO',
+    initials: 'MN',
     name: 'Maria Nyaduse',
     role: 'Head of Support',
     bio: 'Ensuring every customer gets world-class support, 24 hours a day.',
