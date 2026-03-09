@@ -43,14 +43,14 @@ async function savePosts(posts: BlogPost[]) {
   await writeFile(BLOG_DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
 }
 
-// GET single post by ID
+// GET single post by ID or slug
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   const posts = await loadPosts();
-  const post = posts.find((p) => p.id === id);
+  const post = posts.find((p) => p.id === id) ?? posts.find((p) => p.slug === id);
   if (!post) {
     return NextResponse.json({ error: 'Post not found' }, { status: 404 });
   }
