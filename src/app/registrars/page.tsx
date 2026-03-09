@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Globe, Search, ChevronLeft, ChevronRight,
-  ArrowUpDown, SlidersHorizontal, X, ExternalLink,
-  CheckCircle, Shield, Lock
+  ArrowUpDown, X, CheckCircle, Shield
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,18 +21,6 @@ type TldRow = {
   cheapRenew: number;
   cheapRegName: string;
   cheapRenewName: string;
-};
-
-type TldDetail = TldRow & {
-  prices: {
-    registrar: string;
-    url: string;
-    reg: number;
-    renew: number;
-    transfer?: number;
-    promoCode?: string;
-    whoisPrivacy: boolean;
-  }[];
 };
 
 type ListResponse = {
@@ -77,10 +64,6 @@ export default function RegistrarsPage() {
   const [page, setPage]         = useState(1);
   const [perPage, setPerPage]   = useState(25);
 
-  // Detail drawer
-  const [detail, setDetail]     = useState<TldDetail | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-
   const fetchData = useCallback(async () => {
     setLoading(true);
     const params = new URLSearchParams({
@@ -105,15 +88,6 @@ export default function RegistrarsPage() {
 
   // Reset page when filters change
   useEffect(() => { setPage(1); }, [search, type, category, maxReg, sortField, perPage]);
-
-  const openDetail = async (tld: string) => {
-    setDetailLoading(true);
-    setDetail(null);
-    const res = await fetch(`/api/registrars?tld=${encodeURIComponent(tld)}`);
-    const data = await res.json();
-    setDetail(data);
-    setDetailLoading(false);
-  };
 
   const resetFilters = () => {
     setSearch(''); setType(''); setCategory('');
@@ -256,11 +230,10 @@ export default function RegistrarsPage() {
               ) : rows.map((row) => (
                 <tr
                   key={row.tld}
-                  onClick={() => openDetail(row.tld)}
-                  className="border-b border-gray-100 last:border-0 hover:bg-primary-50/30 cursor-pointer transition-colors"
+                  className="border-b border-gray-100 last:border-0 hover:bg-primary-50/30 transition-colors"
                 >
                   <td className="px-5 py-3.5">
-                    <span className="font-bold text-primary-600 text-base">{row.tld}</span>
+                    <Link href={`/registrars/${row.tld.replace(/^\./, '')}`} className="font-bold text-primary-600 text-base hover:underline">{row.tld}</Link>
                     <span className="ml-2 text-xs text-gray-400 capitalize">{row.type.replace('-', ' ')}</span>
                   </td>
                   <td className="px-5 py-3.5 text-center">
@@ -333,84 +306,6 @@ export default function RegistrarsPage() {
           * Prices in USD. Promo rates may apply. Always verify on the registrar&apos;s website.
         </p>
       </div>
-
-      {/* ── Detail Drawer ──────────────────────────────────────────────── */}
-      {(detail || detailLoading) && (
-        <div className="fixed inset-0 z-50 flex">
-          <div className="flex-1 bg-black/40 backdrop-blur-sm" onClick={() => setDetail(null)} />
-          <motion.div
-            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25 }}
-            className="w-full max-w-xl bg-white h-full overflow-y-auto shadow-2xl"
-          >
-            <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-primary-600">{detail?.tld ?? '...'}</h2>
-                <p className="text-xs text-gray-400 capitalize">{detail?.type?.replace('-', ' ')}</p>
-              </div>
-              <button onClick={() => setDetail(null)} className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <X className="h-5 w-5 text-gray-500" />
-              </button>
-            </div>
-
-            {detailLoading ? (
-              <div className="p-6 space-y-4">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />
-                ))}
-              </div>
-            ) : detail && (
-              <div className="p-6 space-y-4">
-                {/* Meta */}
-                <div className="flex gap-4 text-sm">
-                  <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${detail.whoisPrivacy ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                    <Lock className="h-3 w-3" /> WHOIS Privacy {detail.whoisPrivacy ? 'Available' : 'N/A'}
-                  </div>
-                  <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${detail.dnssec ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                    <Shield className="h-3 w-3" /> DNSSEC {detail.dnssec ? 'Supported' : 'Not Supported'}
-                  </div>
-                </div>
-
-                <h3 className="font-semibold text-gray-700 text-sm uppercase tracking-wide">All Registrars — sorted by renewal</h3>
-                <div className="space-y-2">
-                  {detail.prices.map((p, i) => (
-                    <div
-                      key={p.registrar}
-                      className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-colors ${
-                        i === 0 ? 'border-primary-200 bg-primary-50/50' : 'border-gray-100 hover:border-gray-200 bg-white'
-                      }`}
-                    >
-                      <div>
-                        <div className="font-semibold text-sm text-[#111111] flex items-center gap-2">
-                          {i === 0 && <span className="text-xs bg-primary-100 text-primary-700 rounded-full px-2 py-0.5">Best Renewal</span>}
-                          {p.registrar}
-                          {p.promoCode && <span className="text-xs bg-amber-100 text-amber-700 rounded-full px-2 py-0.5">Promo: {p.promoCode}</span>}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-0.5">
-                          Reg: <strong className="text-gray-600">${p.reg.toFixed(2)}</strong>
-                          {p.transfer && <> · Transfer: <strong className="text-gray-600">${p.transfer.toFixed(2)}</strong></>}
-                          {p.whoisPrivacy && <> · <span className="text-green-600">Free Privacy</span></>}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className={`font-bold text-lg ${i === 0 ? 'text-primary-600' : 'text-gray-700'}`}>${p.renew.toFixed(2)}</div>
-                          <div className="text-xs text-gray-400">/yr renewal</div>
-                        </div>
-                        <a href={p.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                          <Button size="sm" variant={i === 0 ? 'default' : 'outline'} className="gap-1 text-xs">
-                            Visit <ExternalLink className="h-3 w-3" />
-                          </Button>
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      )}
     </main>
   );
 }
