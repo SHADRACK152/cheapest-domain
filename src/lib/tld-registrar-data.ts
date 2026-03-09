@@ -403,6 +403,43 @@ export const TLD_DATA: TldEntry[] = [
     ],
   },
   {
+    tld: '.or.ke', type: 'country', category: ['africa', 'kenya', 'nonprofit'], popularity: 9000, whoisPrivacy: false, dnssec: false,
+    prices: [
+      { registrar: 'Sasahost',          url: 'https://sasahost.co.ke',                         reg: 6.50,  renew: 7.50,  whoisPrivacy: false },
+      { registrar: 'KenyaWebExperts',   url: 'https://kenyawebexperts.com',                    reg: 7.00,  renew: 8.00,  whoisPrivacy: false },
+      { registrar: 'TrueHost',          url: 'https://truehost.co.ke',                         reg: 7.33,  renew: 8.67,  whoisPrivacy: false },
+      { registrar: 'Wingubox',          url: 'https://wingubox.com',                           reg: 8.00,  renew: 9.00,  whoisPrivacy: false },
+      { registrar: 'Namecheap',         url: 'https://namecheap.com',                          reg: 9.98,  renew: 11.98, whoisPrivacy: false },
+    ],
+  },
+  {
+    tld: '.ac.ke', type: 'country', category: ['africa', 'kenya', 'education'], popularity: 7500, whoisPrivacy: false, dnssec: false,
+    prices: [
+      { registrar: 'KenyaWebExperts',   url: 'https://kenyawebexperts.com',                    reg: 6.00,  renew: 7.00,  whoisPrivacy: false },
+      { registrar: 'Sasahost',          url: 'https://sasahost.co.ke',                         reg: 6.50,  renew: 7.50,  whoisPrivacy: false },
+      { registrar: 'TrueHost',          url: 'https://truehost.co.ke',                         reg: 7.33,  renew: 8.67,  whoisPrivacy: false },
+      { registrar: 'Wingubox',          url: 'https://wingubox.com',                           reg: 8.00,  renew: 9.50,  whoisPrivacy: false },
+    ],
+  },
+  {
+    tld: '.ne.ke', type: 'country', category: ['africa', 'kenya', 'tech'], popularity: 4000, whoisPrivacy: false, dnssec: false,
+    prices: [
+      { registrar: 'Wingubox',          url: 'https://wingubox.com',                           reg: 7.00,  renew: 8.00,  whoisPrivacy: false },
+      { registrar: 'Sasahost',          url: 'https://sasahost.co.ke',                         reg: 7.50,  renew: 8.50,  whoisPrivacy: false },
+      { registrar: 'TrueHost',          url: 'https://truehost.co.ke',                         reg: 8.00,  renew: 9.33,  whoisPrivacy: false },
+      { registrar: 'KenyaWebExperts',   url: 'https://kenyawebexperts.com',                    reg: 8.00,  renew: 9.00,  whoisPrivacy: false },
+    ],
+  },
+  {
+    tld: '.sc.ke', type: 'country', category: ['africa', 'kenya', 'education'], popularity: 3000, whoisPrivacy: false, dnssec: false,
+    prices: [
+      { registrar: 'Sasahost',          url: 'https://sasahost.co.ke',                         reg: 6.00,  renew: 7.00,  whoisPrivacy: false },
+      { registrar: 'KenyaWebExperts',   url: 'https://kenyawebexperts.com',                    reg: 6.50,  renew: 7.50,  whoisPrivacy: false },
+      { registrar: 'TrueHost',          url: 'https://truehost.co.ke',                         reg: 7.33,  renew: 8.67,  whoisPrivacy: false },
+      { registrar: 'Wingubox',          url: 'https://wingubox.com',                           reg: 7.50,  renew: 9.00,  whoisPrivacy: false },
+    ],
+  },
+  {
     tld: '.africa', type: 'new-generic', category: ['africa'], popularity: 12000, whoisPrivacy: true, dnssec: true,
     prices: [
       { registrar: 'TrueHost',          url: 'https://truehost.co.ke',                         reg: 12.00, renew: 13.33, whoisPrivacy: false },
