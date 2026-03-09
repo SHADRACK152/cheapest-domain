@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -8,6 +8,7 @@ import {
   ArrowUpDown, X, CheckCircle, Shield
 } from 'lucide-react';
 import { USD_TO_KES_RATE } from '@/lib/currency';
+import { TLD_DATA, cheapest } from '@/lib/tld-registrar-data';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,14 +23,6 @@ type TldRow = {
   cheapRenew: number;
   cheapRegName: string;
   cheapRenewName: string;
-};
-
-type ListResponse = {
-  total: number;
-  page: number;
-  perPage: number;
-  totalPages: number;
-  data: TldRow[];
 };
 
 const TLD_TYPES = ['', 'generic', 'country', 'new-generic', 'sponsored'];
@@ -55,15 +48,26 @@ function fmt(usd: number, currency: Currency) {
     : `$${usd.toFixed(2)}`;
 }
 
+// Pre-compute cheapest prices for all TLDs once at module load
+const ALL_ROWS: TldRow[] = TLD_DATA.map((e) => {
+  const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapest(e);
+  return {
+    tld: e.tld,
+    type: e.type,
+    category: e.category,
+    popularity: e.popularity,
+    whoisPrivacy: e.whoisPrivacy,
+    dnssec: e.dnssec,
+    cheapReg,
+    cheapRenew,
+    cheapRegName,
+    cheapRenewName,
+  };
+});
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function RegistrarsPage() {
-  const [rows, setRows]         = useState<TldRow[]>([]);
-  const [total, setTotal]       = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState<string | null>(null);
-
   // Filters
   const [search, setSearch]     = useState('');
   const [type, setType]         = useState('');
@@ -74,37 +78,28 @@ export default function RegistrarsPage() {
   const [perPage, setPerPage]   = useState(25);
   const [currency, setCurrency] = useState<Currency>('USD');
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const params = new URLSearchParams({
-      q: search, type, category,
-      maxReg: String(maxReg),
-      sort: sortField,
-      page: String(page),
-      per_page: String(perPage),
-    });
-    try {
-      setError(null);
-      const res = await fetch(`/api/registrars?${params}`);
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
-      const ct = res.headers.get('content-type') ?? '';
-      if (!ct.includes('application/json')) throw new Error('Unexpected response from server');
-      const data: ListResponse = await res.json();
-      setRows(data.data ?? []);
-      setTotal(data.total ?? 0);
-      setTotalPages(data.totalPages ?? 0);
-    } catch (err) {
-      console.error('Registrars fetch error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load data');
-    } finally {
-      setLoading(false);
+  // All filtering/sorting/pagination happens synchronously in-memory — no API call needed
+  const { rows, total, totalPages } = useMemo(() => {
+    let results = ALL_ROWS;
+    if (search)   results = results.filter((e) => e.tld.includes(search.toLowerCase()));
+    if (type)     results = results.filter((e) => e.type === type);
+    if (category) results = results.filter((e) => e.category.includes(category));
+    results = results.filter((e) => e.cheapReg <= maxReg);
+
+    if (sortField === 'reg') {
+      results = [...results].sort((a, b) => a.cheapReg - b.cheapReg);
+    } else if (sortField === 'renew') {
+      results = [...results].sort((a, b) => a.cheapRenew - b.cheapRenew);
+    } else {
+      results = [...results].sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
     }
+
+    const total = results.length;
+    const totalPages = Math.ceil(total / perPage) || 1;
+    const safePageN = Math.min(page, totalPages);
+    const rows = results.slice((safePageN - 1) * perPage, safePageN * perPage);
+    return { rows, total, totalPages };
   }, [search, type, category, maxReg, sortField, page, perPage]);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-
-  // Reset page when filters change
-  useEffect(() => { setPage(1); }, [search, type, category, maxReg, sortField, perPage]);
 
   const resetFilters = () => {
     setSearch(''); setType(''); setCategory('');
@@ -230,7 +225,9 @@ export default function RegistrarsPage() {
 
         {/* ── Showing count ────────────────────────────────────────────── */}
         <div className="text-xs text-gray-400 mb-3 pl-1">
-          Showing {((page - 1) * perPage) + 1}–{Math.min(page * perPage, total)} of <strong>{total}</strong> TLDs
+          {total === 0
+            ? 'No TLDs match your current filters'
+            : <>Showing {((Math.min(page, totalPages) - 1) * perPage) + 1}–{Math.min(Math.min(page, totalPages) * perPage, total)} of <strong>{total}</strong> TLDs</>}
         </div>
 
         {/* ── Table ───────────────────────────────────────────────────── */}
@@ -251,27 +248,7 @@ export default function RegistrarsPage() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
-                Array.from({ length: perPage }).map((_, i) => (
-                  <tr key={i} className="border-b border-gray-100 animate-pulse">
-                    {Array.from({ length: 6 }).map((_, j) => (
-                      <td key={j} className="px-5 py-4"><div className="h-4 bg-gray-100 rounded w-full" /></td>
-                    ))}
-                  </tr>
-                ))
-              ) : error ? (
-                <tr>
-                  <td colSpan={6} className="px-5 py-12 text-center">
-                    <p className="text-red-500 font-medium mb-3">{error}</p>
-                    <button
-                      onClick={fetchData}
-                      className="px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
-                    >
-                      Retry
-                    </button>
-                  </td>
-                </tr>
-              ) : rows.length === 0 ? (
+              {rows.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-12 text-center text-gray-400 text-sm">
                     No TLDs match your current filters.
