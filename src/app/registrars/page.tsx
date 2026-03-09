@@ -62,6 +62,7 @@ export default function RegistrarsPage() {
   const [total, setTotal]       = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState<string | null>(null);
 
   // Filters
   const [search, setSearch]     = useState('');
@@ -83,6 +84,7 @@ export default function RegistrarsPage() {
       per_page: String(perPage),
     });
     try {
+      setError(null);
       const res = await fetch(`/api/registrars?${params}`);
       if (!res.ok) throw new Error(`Server error ${res.status}`);
       const ct = res.headers.get('content-type') ?? '';
@@ -93,6 +95,7 @@ export default function RegistrarsPage() {
       setTotalPages(data.totalPages ?? 0);
     } catch (err) {
       console.error('Registrars fetch error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load data');
     } finally {
       setLoading(false);
     }
@@ -256,6 +259,24 @@ export default function RegistrarsPage() {
                     ))}
                   </tr>
                 ))
+              ) : error ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-12 text-center">
+                    <p className="text-red-500 font-medium mb-3">{error}</p>
+                    <button
+                      onClick={fetchData}
+                      className="px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
+                    >
+                      Retry
+                    </button>
+                  </td>
+                </tr>
+              ) : rows.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-12 text-center text-gray-400 text-sm">
+                    No TLDs match your current filters.
+                  </td>
+                </tr>
               ) : rows.map((row) => (
                 <tr
                   key={row.tld}
