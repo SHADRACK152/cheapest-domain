@@ -9,14 +9,23 @@ import { DomainSearchBar } from '@/components/domain-search-bar';
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden py-24 md:py-32 lg:py-40">
-      {/* Background Video */}
+      {/* Mobile background — GIF (3MB, plays everywhere without autoplay restrictions) */}
+      <img
+        src="/cheapestdomains.gif"
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover md:hidden"
+      />
+      {/* Desktop background — video (WebM first, MP4 fallback) */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        preload="none"
+        className="absolute inset-0 w-full h-full object-cover hidden md:block"
       >
+        <source src="/cheapestdomains.webm" type="video/webm" />
         <source src="/cheapestdomains.mp4" type="video/mp4" />
       </video>
       {/* Dark overlay for text readability */}
