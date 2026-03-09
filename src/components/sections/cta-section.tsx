@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 
 export function CTASection() {
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-primary-600 via-primary-700 to-purple-700 relative overflow-hidden">
-      {/* Background pattern */}
+    <section className="py-20 md:py-28 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #7c3d0f 0%, #92400e 40%, #b45309 100%)' }}>
+      {/* Subtle dot pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full" style={{
           backgroundImage: 'radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)',
@@ -26,14 +26,14 @@ export function CTASection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
             Ready to Find the Best Domain Deal?
           </h2>
-          <p className="text-lg text-white/80 max-w-xl mx-auto">
+          <p className="text-lg text-orange-100/80 max-w-xl mx-auto">
             Compare domain prices and avoid expensive renewals. Our mission is to help you find affordable domain names without misleading pricing structures.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/pricing">
               <Button
                 size="xl"
-                className="bg-white text-primary-700 hover:bg-gray-100 shadow-xl shadow-black/10"
+                className="bg-orange-50 text-amber-900 hover:bg-white shadow-xl shadow-black/20"
               >
                 Compare Domain Deals
                 <ArrowRight className="h-5 w-5 ml-2" />
@@ -43,7 +43,7 @@ export function CTASection() {
               <Button
                 size="xl"
                 variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 hover:border-white/50"
+                className="border-orange-200/40 text-white hover:bg-white/10 hover:border-orange-200/60"
               >
                 Read Our Blog
               </Button>
