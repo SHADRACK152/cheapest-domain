@@ -1,16 +1,26 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { ArrowRight, BarChart2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { DomainSearchBar } from '@/components/domain-search-bar';
 
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden py-24 md:py-32 lg:py-40">
-      {/* Background gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary-100/40 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-amber-100/40 blur-3xl" />
-      </div>
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/cheapestdomains.mp4" type="video/mp4" />
+      </video>
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/60" />
 
       <div className="container-wide relative">
         <motion.div
@@ -25,9 +35,9 @@ export function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-1.5 text-sm font-medium text-primary-600">
-              <span className="flex h-2 w-2 rounded-full bg-primary-600 animate-pulse-slow" />
-              Lowest Prices Globally
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-white border border-white/20">
+              <span className="flex h-2 w-2 rounded-full bg-white animate-pulse-slow" />
+              Transparent Pricing — No Renewal Surprises
             </span>
           </motion.div>
 
@@ -36,10 +46,10 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#111111] leading-[1.1]"
+            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1]"
           >
-            Find Your Perfect{' '}
-            <span className="gradient-text">Domain Name</span>
+            Cheapest Domains.{' '}
+            <span className="gradient-text">No Hidden Fees.</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -47,9 +57,9 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-gray-300 max-w-xl mx-auto leading-relaxed"
           >
-            Search and discover the perfect domain. Register instantly at TrueHost with the lowest prices globally.
+            Compare real prices across registrars — register and renew affordably.
           </motion.p>
 
           {/* Search Bar */}
@@ -59,6 +69,27 @@ export function HeroSection() {
             transition={{ delay: 0.4, duration: 0.6 }}
           >
             <DomainSearchBar large />
+          </motion.div>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <Link href="/pricing">
+              <Button size="lg" className="gap-2">
+                <BarChart2 className="h-5 w-5" />
+                Compare Domain Prices
+              </Button>
+            </Link>
+            <Link href="/pricing">
+              <Button size="lg" variant="outline" className="gap-2">
+                See Cheapest Domains Today
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

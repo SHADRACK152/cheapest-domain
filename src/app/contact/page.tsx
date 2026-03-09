@@ -31,9 +31,8 @@ export default function ContactPage() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    // Simulate API call
-    await new Promise((r) => setTimeout(r, 1500));
-    console.log('Contact form:', data);
+    const mailtoLink = `mailto:support@cheapestdomains.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`)}`;
+    window.location.href = mailtoLink;
     setIsSubmitted(true);
     reset();
     setTimeout(() => setIsSubmitted(false), 5000);
@@ -89,7 +88,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-[#111111]">Call Us</h3>
-                  <p className="text-sm text-gray-500 mt-1">+254 700 000 000</p>
+                  <p className="text-sm text-gray-500 mt-1">+254 740 637273</p>
                   <p className="text-xs text-gray-400 mt-0.5">
                     Mon-Fri, 8am-8pm EAT
                   </p>
@@ -105,7 +104,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold text-[#111111]">Visit Us</h3>
                   <p className="text-sm text-gray-500 mt-1">
-                    Westlands, Nairobi
+                    JUJA, Nairobi
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">Kenya</p>
                 </div>

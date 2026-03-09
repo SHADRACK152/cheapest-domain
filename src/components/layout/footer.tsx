@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Globe, Mail, Phone, MapPin } from 'lucide-react';
-import { NAV_ITEMS, POPULAR_EXTENSIONS } from '@/lib/constants';
+import { POPULAR_EXTENSIONS } from '@/lib/constants';
 
 export function Footer() {
   return (
@@ -27,16 +27,31 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-[#111111] mb-4">Quick Links</h3>
             <ul className="space-y-3">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-gray-500 hover:text-primary-600 transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/" className="text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                  Domain Prices
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -65,15 +80,19 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-gray-500">
                 <Mail className="h-4 w-4 text-gray-400" />
-                support@truehost.co.ke
+                <a href="mailto:support@cheapestdomains.com" className="hover:text-primary-600 transition-colors">
+                  support@cheapestdomains.com
+                </a>
               </li>
               <li className="flex items-center gap-2 text-sm text-gray-500">
                 <Phone className="h-4 w-4 text-gray-400" />
-                +254 20 528 0000
+                <a href="tel:+254740637273" className="hover:text-primary-600 transition-colors">
+                  +254 740 637273
+                </a>
               </li>
               <li className="flex items-center gap-2 text-sm text-gray-500">
                 <MapPin className="h-4 w-4 text-gray-400" />
-                Nairobi, Kenya
+                JUJA, Nairobi, Kenya
               </li>
             </ul>
           </div>

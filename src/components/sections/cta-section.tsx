@@ -24,20 +24,21 @@ export function CTASection() {
           className="text-center space-y-8 max-w-3xl mx-auto"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-            Ready to Register Your Domain?
+            Ready to Find the Best Domain Deal?
           </h2>
           <p className="text-lg text-white/80 max-w-xl mx-auto">
-            Get started at TrueHost with the lowest prices globally. Trusted by thousands of businesses worldwide.
+            Compare domain prices and avoid expensive renewals. Our mission is to help you find affordable domain names without misleading pricing structures.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              size="xl"
-              className="bg-white text-primary-700 hover:bg-gray-100 shadow-xl shadow-black/10"
-              onClick={() => window.open('https://truehost.com/domain-registration', '_blank')}
-            >
-              Register at TrueHost
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </Button>
+            <Link href="/pricing">
+              <Button
+                size="xl"
+                className="bg-white text-primary-700 hover:bg-gray-100 shadow-xl shadow-black/10"
+              >
+                Compare Domain Deals
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+            </Link>
             <Link href="/blog">
               <Button
                 size="xl"
