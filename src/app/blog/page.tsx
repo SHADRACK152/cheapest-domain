@@ -69,12 +69,12 @@ export default function BlogPage() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const response = await fetch('/api/ghost/posts');
+        const response = await fetch('/api/blog?status=published');
         const data = await response.json();
         if (data.success) {
           setBlogPosts(data.posts);
         } else {
-          console.error('Ghost API error:', data.error);
+          console.error('Blog API error:', data.error);
         }
       } catch (error) {
         console.error('Error fetching posts:', error);

@@ -93,6 +93,46 @@ export default function AdminBlogPage() {
     }
   }
 
+  async function handleDelete(postId: string) {
+    if (!confirm('Delete this post? This cannot be undone.')) return;
+    try {
+      const res = await fetch(`/api/blog/${postId}`, { method: 'DELETE' });
+      if (res.ok) {
+        setBlogPosts((prev) => prev.filter((p) => p.id !== postId));
+        setSelectedPosts((prev) => prev.filter((id) => id !== postId));
+      } else {
+        alert('Failed to delete post.');
+      }
+    } catch {
+      alert('Error deleting post.');
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (!selectedPosts.length) return;
+    if (!confirm(`Delete ${selectedPosts.length} post(s)? This cannot be undone.`)) return;
+    await Promise.all(selectedPosts.map((id) => fetch(`/api/blog/${id}`, { method: 'DELETE' })));
+    setBlogPosts((prev) => prev.filter((p) => !selectedPosts.includes(p.id)));
+    setSelectedPosts([]);
+  }
+
+  async function handleBulkStatus(newStatus: 'published' | 'draft') {
+    if (!selectedPosts.length) return;
+    await Promise.all(
+      selectedPosts.map((id) =>
+        fetch(`/api/blog/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus }),
+        })
+      )
+    );
+    setBlogPosts((prev) =>
+      prev.map((p) => (selectedPosts.includes(p.id) ? { ...p, status: newStatus } : p))
+    );
+    setSelectedPosts([]);
+  }
+
   if (isLoading || isLoadingPosts) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -279,13 +319,13 @@ export default function AdminBlogPage() {
                 {selectedPosts.length} post{selectedPosts.length > 1 ? 's' : ''} selected
               </p>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => handleBulkStatus('published')}>
                   Publish
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => handleBulkStatus('draft')}>
                   Unpublish
                 </Button>
-                <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700" onClick={handleBulkDelete}>
                   Delete
                 </Button>
               </div>
@@ -417,7 +457,7 @@ export default function AdminBlogPage() {
                             <Edit2 className="h-4 w-4" />
                           </Button>
                         </Link>
-                        <Button variant="ghost" size="sm" className="text-gray-500 hover:text-red-600">
+                        <Button variant="ghost" size="sm" className="text-gray-500 hover:text-red-600" onClick={() => handleDelete(post.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
