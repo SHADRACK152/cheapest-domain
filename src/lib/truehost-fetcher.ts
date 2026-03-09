@@ -78,8 +78,8 @@ export async function fetchTrueHostResults(query: string): Promise<SearchResult>
     `${domainName}.ng`,
   ];
 
-  // Remove duplicates
-  const uniqueDomains = Array.from(new Set(domainsToCheck)).slice(0, 15);
+  // Remove duplicates (cap at 8 to keep total response well within proxy timeout)
+  const uniqueDomains = Array.from(new Set(domainsToCheck)).slice(0, 8);
 
   console.log(`📋 Checking ${uniqueDomains.length} domains...`);
 
@@ -162,7 +162,7 @@ async function checkWithRDAP(domain: string): Promise<boolean | null> {
   try {
     const response = await fetch(`https://rdap.org/domain/${domain}`, {
       headers: { 'Accept': 'application/rdap+json' },
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(3000),
       redirect: 'follow',
     });
 
@@ -192,7 +192,7 @@ async function queryDNSRecord(
 
     const response = await fetch(url, {
       headers: { Accept: 'application/dns-json' },
-      signal: AbortSignal.timeout(6000),
+      signal: AbortSignal.timeout(3000),
     });
 
     if (!response.ok) return null;
@@ -263,22 +263,37 @@ async function checkWithDNS(domain: string): Promise<boolean> {
  * Priority:
  *  1. RDAP — authoritative registry lookup for supported gTLDs
  *  2. Multi-record DNS — NS + A + SOA checks for all TLDs (including ccTLDs)
+ *
+ * Hard cap: 5 seconds per domain to prevent worker starvation on the server.
  */
 async function checkRealDomainAvailability(domain: string): Promise<boolean> {
-  const ext = getDomainExtension(domain);
+  // Hard per-domain timeout — resolves false ("taken") if check exceeds 5s.
+  // This prevents a single slow DNS/RDAP call from blocking the entire request.
+  const timeoutPromise = new Promise<boolean>((resolve) =>
+    setTimeout(() => {
+      console.warn(`⏱️  Domain check timed out for ${domain}, marking as taken`);
+      resolve(false);
+    }, 5000)
+  );
 
-  // Use RDAP for supported gTLDs — most accurate method
-  if (RDAP_SUPPORTED_TLDS.has(ext)) {
-    const rdapResult = await checkWithRDAP(domain);
-    // RDAP says "taken" (false) → trust immediately (very reliable)
-    if (rdapResult === false) return false;
-    // RDAP says "available" (true) or inconclusive (null) → verify with DNS
-    // because RDAP can give false positives for some registries (e.g. .io)
-    if (rdapResult === null) {
-      console.warn(`⚠️  RDAP inconclusive for ${domain}, falling back to DNS`);
+  const checkPromise = (async () => {
+    const ext = getDomainExtension(domain);
+
+    // Use RDAP for supported gTLDs — most accurate method
+    if (RDAP_SUPPORTED_TLDS.has(ext)) {
+      const rdapResult = await checkWithRDAP(domain);
+      // RDAP says "taken" (false) → trust immediately (very reliable)
+      if (rdapResult === false) return false;
+      // RDAP says "available" (true) or inconclusive (null) → verify with DNS
+      // because RDAP can give false positives for some registries (e.g. .io)
+      if (rdapResult === null) {
+        console.warn(`⚠️  RDAP inconclusive for ${domain}, falling back to DNS`);
+      }
     }
-  }
 
-  // DNS multi-record check — always run for ccTLDs, and as confirmation for gTLDs
-  return checkWithDNS(domain);
+    // DNS multi-record check — always run for ccTLDs, and as confirmation for gTLDs
+    return checkWithDNS(domain);
+  })();
+
+  return Promise.race([checkPromise, timeoutPromise]);
 }

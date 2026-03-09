@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { searchDomain } from '@/lib/domain-api';
 import { DOMAIN_EXTENSIONS } from '@/lib/constants';
 
+// Tell Next.js this route may take up to 25 seconds (AI + domain checks).
+export const maxDuration = 25;
+
 // Available tools Kaya can use - Making Kaya AGENTIC!
 const AVAILABLE_TOOLS = `
 You are KAYA - an agentic AI that can perform real actions! Here are your superpowers:
@@ -399,6 +402,7 @@ Return ONLY in this exact JSON format:
               'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
               'Content-Type': 'application/json',
             },
+            signal: AbortSignal.timeout(15000),
             body: JSON.stringify({
               model: 'llama-3.3-70b-versatile',
               messages: [{ role: 'user', content: blogPrompt }],
@@ -479,6 +483,7 @@ Rules:
               'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
               'Content-Type': 'application/json',
             },
+            signal: AbortSignal.timeout(15000),
             body: JSON.stringify({
               model: 'llama-3.3-70b-versatile',
               messages: [{ role: 'user', content: formatPrompt }],
@@ -559,6 +564,7 @@ Return ONLY the JSON, nothing else.`;
               'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
               'Content-Type': 'application/json',
             },
+            signal: AbortSignal.timeout(15000),
             body: JSON.stringify({
               model: 'llama-3.3-70b-versatile',
               messages: [{ role: 'user', content: blogPrompt }],
@@ -715,6 +721,7 @@ async function getChatResponse(message: string, history: any[], userInfo: any) {
           'Authorization': `Bearer ${GROQ_API_KEY}`,
           'Content-Type': 'application/json',
         },
+        signal: AbortSignal.timeout(15000),
         body: JSON.stringify({
           model: 'llama-3.3-70b-versatile', // Current production model (replaces llama3-70b-8192)
           messages,

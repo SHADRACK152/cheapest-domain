@@ -84,10 +84,15 @@ export default function RegistrarsPage() {
     });
     try {
       const res = await fetch(`/api/registrars?${params}`);
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      const ct = res.headers.get('content-type') ?? '';
+      if (!ct.includes('application/json')) throw new Error('Unexpected response from server');
       const data: ListResponse = await res.json();
       setRows(data.data ?? []);
       setTotal(data.total ?? 0);
       setTotalPages(data.totalPages ?? 0);
+    } catch (err) {
+      console.error('Registrars fetch error:', err);
     } finally {
       setLoading(false);
     }

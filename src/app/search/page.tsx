@@ -164,12 +164,19 @@ function SearchContent() {
       // Call the API route for real domain checking
       fetch(`/api/search-domain?q=${encodeURIComponent(query)}`)
         .then(async (response) => {
-          const data = await response.json();
-          
           if (!response.ok) {
-            throw new Error(data.message || 'Failed to search domain');
+            // Avoid calling .json() on HTML error pages (e.g. Nginx 504)
+            let message = 'Failed to search domain';
+            try {
+              const ct = response.headers.get('content-type') ?? '';
+              if (ct.includes('application/json')) {
+                const errData = await response.json();
+                message = errData.message || message;
+              }
+            } catch {}
+            throw new Error(message);
           }
-          
+          const data = await response.json();
           setResults(data.data);
           setIsLoading(false);
         })

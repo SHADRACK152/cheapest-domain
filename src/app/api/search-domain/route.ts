@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchDomain } from '@/lib/domain-api';
 
+// Tell Next.js (and Vercel/cPanel) this route may take up to 25 seconds.
+// This prevents the proxy from issuing a 504 before the DNS checks complete.
+export const maxDuration = 25;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q');
