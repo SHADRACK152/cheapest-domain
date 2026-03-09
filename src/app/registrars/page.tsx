@@ -7,6 +7,7 @@ import {
   Globe, Search, ChevronLeft, ChevronRight,
   ArrowUpDown, X, CheckCircle, Shield
 } from 'lucide-react';
+import { USD_TO_KES_RATE } from '@/lib/currency';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -47,6 +48,13 @@ const CATEGORIES = [
 
 const PER_PAGE_OPTIONS = [10, 25, 50, 100];
 
+type Currency = 'USD' | 'KES';
+function fmt(usd: number, currency: Currency) {
+  return currency === 'KES'
+    ? `KES ${Math.round(usd * USD_TO_KES_RATE).toLocaleString()}`
+    : `$${usd.toFixed(2)}`;
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function RegistrarsPage() {
@@ -63,6 +71,7 @@ export default function RegistrarsPage() {
   const [sortField, setSortField] = useState('popularity');
   const [page, setPage]         = useState(1);
   const [perPage, setPerPage]   = useState(25);
+  const [currency, setCurrency] = useState<Currency>('USD');
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -194,6 +203,21 @@ export default function RegistrarsPage() {
           <button onClick={resetFilters} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-gray-200 text-gray-500 hover:border-red-300 hover:text-red-500 transition-all">
             <X className="h-3 w-3" /> Reset
           </button>
+
+          {/* Currency toggle */}
+          <div className="ml-auto flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+            {(['USD', 'KES'] as Currency[]).map((c) => (
+              <button
+                key={c}
+                onClick={() => setCurrency(c)}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  currency === c ? 'bg-primary-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* ── Showing count ────────────────────────────────────────────── */}
@@ -237,11 +261,11 @@ export default function RegistrarsPage() {
                     <span className="ml-2 text-xs text-gray-400 capitalize">{row.type.replace('-', ' ')}</span>
                   </td>
                   <td className="px-5 py-3.5 text-center">
-                    <div className="font-semibold text-gray-700">${row.cheapReg.toFixed(2)}</div>
+                    <div className="font-semibold text-gray-700">{fmt(row.cheapReg, currency)}</div>
                     <div className="text-xs text-gray-400">{row.cheapRegName}</div>
                   </td>
                   <td className="px-5 py-3.5 text-center">
-                    <div className="font-bold text-primary-600">${row.cheapRenew.toFixed(2)}</div>
+                    <div className="font-bold text-primary-600">{fmt(row.cheapRenew, currency)}</div>
                     <div className="text-xs text-gray-400">{row.cheapRenewName}</div>
                   </td>
                   <td className="px-5 py-3.5 text-center">
@@ -303,7 +327,7 @@ export default function RegistrarsPage() {
         )}
 
         <p className="text-center text-xs text-gray-400 mt-8">
-          * Prices in USD. Promo rates may apply. Always verify on the registrar&apos;s website.
+          * Prices in {currency}. {currency === 'KES' ? `Converted at 1 USD = ${USD_TO_KES_RATE} KES. ` : ''}Promo rates may apply. Always verify on the registrar&apos;s website.
         </p>
       </div>
     </main>
