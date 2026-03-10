@@ -55,8 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Demo mode - for development without API
-    if (process.env.NODE_ENV === 'development') {
-      try {
+    try {
         // Decode user data from session
         const userData = JSON.parse(Buffer.from(session.value, 'base64').toString('utf-8'));
         return NextResponse.json({
@@ -65,25 +64,12 @@ export async function GET(request: NextRequest) {
         });
       } catch (decodeError) {
         console.error('Failed to decode session:', decodeError);
-        // Fallback to default demo user
-        return NextResponse.json({
-          success: true,
-          user: {
-            id: 'demo-user-id',
-            email: 'demo@example.com',
-            name: 'Demo User',
-            accountType: 'personal',
-          },
-        });
+        cookieStore.delete('session');
+        return NextResponse.json(
+          { error: 'Session invalid' },
+          { status: 401 }
+        );
       }
-    }
-
-    // No valid session
-    cookieStore.delete('session');
-    return NextResponse.json(
-      { error: 'Not authenticated' },
-      { status: 401 }
-    );
   } catch (error) {
     console.error('Me endpoint error:', error);
     return NextResponse.json(
