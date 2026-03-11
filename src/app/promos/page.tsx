@@ -147,7 +147,7 @@ export default function PromosPage() {
         </div>
       </div>
 
-      {/* ── Cards grid ─────────────────────────────────────────────────────── */}
+      {/* ── Table ──────────────────────────────────────────────────────────── */}
       <div className="max-w-5xl mx-auto px-4 py-10">
         {filtered.length === 0 ? (
           <div className="text-center py-24 text-gray-400">
@@ -156,103 +156,99 @@ export default function PromosPage() {
             <p className="text-sm mt-1">Try adjusting your search or filter</p>
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((promo) => {
-              const brandBg = BRAND_COLORS[promo.registrar] ?? 'bg-gray-600';
-              const isCopied = copied === promo.code;
-              return (
-                <div
-                  key={`${promo.registrar}::${promo.code}`}
-                  className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col"
-                >
-                  {/* Registrar banner */}
-                  <div className={`${brandBg} px-4 py-2 flex items-center justify-between`}>
-                    <span className="text-white font-semibold text-sm">{promo.registrar}</span>
-                    <a
-                      href={promo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/80 hover:text-white transition-colors"
-                      aria-label={`Visit ${promo.registrar}`}
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide">
+                  <th className="px-4 py-3 text-left font-semibold">#</th>
+                  <th className="px-4 py-3 text-left font-semibold">Registrar</th>
+                  <th className="px-4 py-3 text-left font-semibold">Promo Code</th>
+                  <th className="px-4 py-3 text-left font-semibold">1st-Year Price</th>
+                  <th className="px-4 py-3 text-left font-semibold">Applies To</th>
+                  <th className="px-4 py-3 text-left font-semibold">Link</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {filtered.map((promo, i) => {
+                  const brandBg = BRAND_COLORS[promo.registrar] ?? 'bg-gray-600';
+                  const isCopied = copied === promo.code;
+                  return (
+                    <tr
+                      key={`${promo.registrar}::${promo.code}`}
+                      className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors"
                     >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </div>
+                      {/* # */}
+                      <td className="px-4 py-3 text-gray-400 font-medium tabular-nums">{i + 1}</td>
 
-                  <div className="p-4 flex flex-col gap-3 flex-1">
-                    {/* Promo code */}
-                    <div>
-                      <p className="text-xs text-gray-400 mb-1 uppercase tracking-wide font-medium">Promo Code</p>
-                      <button
-                        onClick={() => copyCode(promo.code)}
-                        className={`w-full flex items-center justify-between gap-2 rounded-lg border-2 border-dashed px-4 py-2.5 font-mono font-bold text-lg transition-all ${
-                          isCopied
-                            ? 'border-green-400 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400'
-                            : 'border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 hover:border-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900'
-                        }`}
-                        title="Click to copy"
-                      >
-                        <span>{promo.code}</span>
-                        {isCopied ? (
-                          <CheckCircle2 className="w-5 h-5 shrink-0 text-green-500" />
-                        ) : (
-                          <Copy className="w-4 h-4 shrink-0 opacity-60" />
-                        )}
-                      </button>
-                      {isCopied && (
-                        <p className="text-xs text-green-600 dark:text-green-400 mt-1 text-center">Copied!</p>
-                      )}
-                    </div>
+                      {/* Registrar */}
+                      <td className="px-4 py-3">
+                        <span className={`inline-block text-white text-xs font-semibold px-2.5 py-1 rounded-full ${brandBg}`}>
+                          {promo.registrar}
+                        </span>
+                      </td>
 
-                    {/* Price tag */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl font-extrabold text-gray-900 dark:text-white">
+                      {/* Promo code */}
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => copyCode(promo.code)}
+                          title="Click to copy"
+                          className={`inline-flex items-center gap-2 font-mono font-bold text-sm px-3 py-1.5 rounded-lg border-2 border-dashed transition-all ${
+                            isCopied
+                              ? 'border-green-400 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400'
+                              : 'border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 hover:border-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900'
+                          }`}
+                        >
+                          {promo.code}
+                          {isCopied
+                            ? <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            : <Copy className="w-3.5 h-3.5 opacity-50" />}
+                        </button>
+                      </td>
+
+                      {/* Price */}
+                      <td className="px-4 py-3 tabular-nums font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                         ${promo.minRegPrice.toFixed(2)}
-                      </span>
-                      <span className="text-gray-400 text-sm">/ first year</span>
-                    </div>
+                        <span className="text-gray-400 font-normal text-xs ml-1">/ yr</span>
+                      </td>
 
-                    {/* TLD badges */}
-                    <div>
-                      <p className="text-xs text-gray-400 mb-1.5 uppercase tracking-wide font-medium">
-                        Applies to
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {promo.tlds.map(({ tld, regPrice }) => (
-                          <Link
-                            key={tld}
-                            href={`/registrars/${tld.replace('.', '')}`}
-                            className="inline-flex items-center gap-1 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900 text-gray-700 dark:text-gray-300 hover:text-primary-700 dark:hover:text-primary-300 rounded-full px-2.5 py-1 font-medium transition-colors"
-                            title={`$${regPrice.toFixed(2)}/yr with this code`}
-                          >
-                            {tld}
-                            <span className="text-gray-400 font-normal">${regPrice.toFixed(2)}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
+                      {/* TLD badges */}
+                      <td className="px-4 py-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {promo.tlds.map(({ tld, regPrice }) => (
+                            <Link
+                              key={tld}
+                              href={`/registrars/${tld.replace('.', '')}`}
+                              className="inline-flex items-center gap-1 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900 text-gray-700 dark:text-gray-300 hover:text-primary-700 dark:hover:text-primary-300 rounded-full px-2.5 py-1 font-medium transition-colors"
+                              title={`$${regPrice.toFixed(2)}/yr`}
+                            >
+                              {tld}
+                            </Link>
+                          ))}
+                        </div>
+                      </td>
 
-                    {/* CTA */}
-                    <div className="mt-auto pt-2">
-                      <a
-                        href={promo.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 ${brandBg}`}
-                      >
-                        Visit {promo.registrar}
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                      {/* Visit link */}
+                      <td className="px-4 py-3">
+                        <a
+                          href={promo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline whitespace-nowrap"
+                        >
+                          Visit
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
 
         {/* Disclaimer */}
-        <p className="mt-12 text-center text-xs text-gray-400 max-w-xl mx-auto">
+        <p className="mt-8 text-center text-xs text-gray-400 max-w-xl mx-auto">
           Promo codes and prices shown are for the first registration year only.
           Renewal rates are typically higher. Always verify the final price on the
           registrar&apos;s website before purchasing.
