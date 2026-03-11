@@ -86,16 +86,34 @@ export default function PromosPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-4">
+      <div className="relative overflow-hidden text-white py-16 px-4">
+        {/* Background video / GIF */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/cheapestdomains.gif"
+        >
+          <source src="/cheapestdomains.webm" type="video/webm" />
+          <source src="/cheapestdomains.mp4" type="video/mp4" />
+          {/* GIF fallback for browsers that don't support video */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/cheapestdomains.gif" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        </video>
+        {/* Dark overlay so text stays readable */}
+        <div className="absolute inset-0 bg-black/55" />
+
+        <div className="relative z-10 max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium mb-4">
             <Tag className="w-4 h-4" />
             <span>{ALL_PROMOS.length} active deals</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-3 drop-shadow-lg">
             Domain Promo Codes &amp; Deals
           </h1>
-          <p className="text-primary-100 text-lg max-w-2xl mx-auto">
+          <p className="text-white/80 text-lg max-w-2xl mx-auto drop-shadow">
             Save on your next domain registration with the latest promo codes from
             top registrars. Click any code to copy it instantly.
           </p>
