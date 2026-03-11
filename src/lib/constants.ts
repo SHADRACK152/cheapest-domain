@@ -3,6 +3,7 @@ import { DomainExtension, Feature, NavItem } from '@/types';
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Registrars', href: '/registrars' },
+  { label: 'Promos', href: '/promos' },
   { label: 'WHOIS', href: '/whois' },
   { label: 'Blog', href: '/blog' },
   { label: 'About', href: '/about' },
