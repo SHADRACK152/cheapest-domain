@@ -18,8 +18,9 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      <main className="pt-16">{children}</main>
+      <main style={{ paddingTop: 'var(--header-h, 64px)' }}>{children}</main>
       <Footer />
+    </>
     </>
   );
 }

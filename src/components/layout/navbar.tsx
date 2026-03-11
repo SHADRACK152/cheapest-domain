@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +11,7 @@ import { NAV_ITEMS } from '@/lib/constants';
 import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { cn } from '@/lib/utils';
+import { PromoBar } from './promo-bar';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,6 +20,17 @@ export function Navbar() {
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
   const { itemCount } = useCart();
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Expose header height as a CSS variable so LayoutWrapper can offset the page
+  function updateHeaderHeight() {
+    if (headerRef.current) {
+      document.documentElement.style.setProperty(
+        '--header-h',
+        headerRef.current.offsetHeight + 'px',
+      );
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,12 +51,20 @@ export function Navbar() {
     };
   }, []);
 
+  // Set initial height after paint
+  useLayoutEffect(() => {
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    return () => window.removeEventListener('resize', updateHeaderHeight);
+  });
+
   useEffect(() => {
     setIsMobileOpen(false);
   }, [pathname]);
 
   return (
     <header
+      ref={headerRef}
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
@@ -52,6 +72,8 @@ export function Navbar() {
           : 'bg-transparent'
       )}
     >
+      {/* Promo ticker bar */}
+      <PromoBar onHeightChange={updateHeaderHeight} />
       <nav className="container-wide flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">

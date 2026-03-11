@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Globe, Search, ChevronLeft, ChevronRight,
-  ArrowUpDown, X, CheckCircle, Shield
+  ArrowUpDown, X, CheckCircle, Shield, Copy, CheckCircle2, Tag,
 } from 'lucide-react';
 import { USD_TO_KES_RATE } from '@/lib/currency';
 import { TLD_CATALOG, cheapestCatalog } from '@/lib/tld-catalog';
+import { cn } from '@/lib/utils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -23,6 +24,8 @@ type TldRow = {
   cheapRenew: number;
   cheapRegName: string;
   cheapRenewName: string;
+  cheapRegPromo?: string;
+  cheapRegUrl?: string;
 };
 
 const TLD_TYPES = ['', 'generic', 'country', 'new-generic', 'sponsored'];
@@ -51,6 +54,7 @@ function fmt(usd: number, currency: Currency) {
 // Pre-compute cheapest prices for all TLDs once at module load
 const ALL_ROWS: TldRow[] = TLD_CATALOG.map((e) => {
   const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapestCatalog(e);
+  const cheapRegEntry = e.prices.find((p) => p.reg === cheapReg);
   return {
     tld: e.tld,
     type: e.type,
@@ -62,6 +66,8 @@ const ALL_ROWS: TldRow[] = TLD_CATALOG.map((e) => {
     cheapRenew,
     cheapRegName,
     cheapRenewName,
+    cheapRegPromo: cheapRegEntry?.promoCode,
+    cheapRegUrl:   cheapRegEntry?.url,
   };
 });
 
@@ -69,14 +75,23 @@ const ALL_ROWS: TldRow[] = TLD_CATALOG.map((e) => {
 
 export default function RegistrarsPage() {
   // Filters
-  const [search, setSearch]     = useState('');
-  const [type, setType]         = useState('');
-  const [category, setCategory] = useState('');
-  const [maxReg, setMaxReg]     = useState(100);
+  const [search, setSearch]       = useState('');
+  const [type, setType]           = useState('');
+  const [category, setCategory]   = useState('');
+  const [maxReg, setMaxReg]       = useState(100);
   const [sortField, setSortField] = useState('popularity');
-  const [page, setPage]         = useState(1);
-  const [perPage, setPerPage]   = useState(25);
-  const [currency, setCurrency] = useState<Currency>('USD');
+  const [page, setPage]           = useState(1);
+  const [perPage, setPerPage]     = useState(25);
+  const [currency, setCurrency]   = useState<Currency>('USD');
+  const [copied, setCopied]       = useState<string | null>(null);
+
+  const copyCode = useCallback((code: string) => {
+    navigator.clipboard.writeText(code).catch(() => {});
+    setCopied(code);
+    setTimeout(() => setCopied(null), 2000);
+  }, []);
+
+  const promoCount = useMemo(() => ALL_ROWS.filter((r) => r.cheapRegPromo).length, []);
 
   // All filtering/sorting/pagination happens synchronously in-memory — no API call needed
   const { rows, total, totalPages } = useMemo(() => {
@@ -120,6 +135,12 @@ export default function RegistrarsPage() {
           <p className="text-gray-500 max-w-xl mx-auto">
             Real registration &amp; renewal prices across major registrars — click any TLD to see all options.
           </p>
+          {promoCount > 0 && (
+            <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-1.5 text-sm text-amber-700 font-medium">
+              <Tag className="h-4 w-4" />
+              {promoCount} TLDs have active promo codes — look for the <span className="font-bold mx-1">🏷</span> badge
+            </div>
+          )}
         </motion.div>
 
         {/* ── Filters ─────────────────────────────────────────────────── */}
@@ -235,56 +256,108 @@ export default function RegistrarsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
-                <th className="text-left px-5 py-3 font-semibold">Domain</th>
-                <th className="text-center px-5 py-3 font-semibold">
+                <th className="text-left px-5 py-3.5 font-semibold">Domain</th>
+                <th className="text-center px-4 py-3.5 font-semibold">
                   <span className="flex items-center justify-center gap-1"><ArrowUpDown className="h-3 w-3" />Cheapest Reg</span>
                 </th>
-                <th className="text-center px-5 py-3 font-semibold text-primary-600">
+                <th className="text-center px-4 py-3.5 font-semibold text-primary-600">
                   <span className="flex items-center justify-center gap-1"><ArrowUpDown className="h-3 w-3" />Cheapest Renewal</span>
                 </th>
-                <th className="text-center px-5 py-3 font-semibold">WHOIS Privacy</th>
-                <th className="text-center px-5 py-3 font-semibold">DNSSEC</th>
-                <th className="text-center px-5 py-3 font-semibold">Popularity</th>
+                <th className="text-center px-4 py-3.5 font-semibold text-amber-600">Promo Code</th>
+                <th className="text-center px-4 py-3.5 font-semibold">WHOIS Privacy</th>
+                <th className="text-center px-4 py-3.5 font-semibold">DNSSEC</th>
+                <th className="text-center px-4 py-3.5 font-semibold">Popularity</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-12 text-center text-gray-400 text-sm">
+                  <td colSpan={7} className="px-5 py-12 text-center text-gray-400 text-sm">
                     No TLDs match your current filters.
                   </td>
                 </tr>
-              ) : rows.map((row) => (
+              ) : rows.map((row, rowIdx) => (
                 <tr
                   key={row.tld}
-                  className="border-b border-gray-100 last:border-0 hover:bg-primary-50/30 transition-colors"
+                  className={cn(
+                    'border-b border-gray-100 last:border-0 transition-colors',
+                    row.cheapRegPromo ? 'hover:bg-amber-50/40' : 'hover:bg-primary-50/30',
+                    rowIdx % 2 === 0 ? '' : 'bg-gray-50/40',
+                  )}
                 >
+                  {/* Domain */}
                   <td className="px-5 py-3.5">
-                    <Link href={`/registrars/${row.tld.replace(/^\./, '')}`} className="font-bold text-primary-600 text-base hover:underline">{row.tld}</Link>
-                    <span className="ml-2 text-xs text-gray-400 capitalize">{row.type.replace('-', ' ')}</span>
+                    <div className="flex items-center gap-2">
+                      <Link href={`/registrars/${row.tld.replace(/^\./, '')}`} className="font-bold text-primary-600 text-base hover:underline">{row.tld}</Link>
+                      <span className={cn(
+                        'text-[10px] font-semibold px-1.5 py-0.5 rounded-full capitalize',
+                        row.type === 'generic'     && 'bg-blue-50 text-blue-600',
+                        row.type === 'country'     && 'bg-green-50 text-green-600',
+                        row.type === 'new-generic' && 'bg-violet-50 text-violet-600',
+                        row.type === 'sponsored'   && 'bg-orange-50 text-orange-600',
+                      )}>{row.type.replace('-', ' ')}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {row.category.slice(0, 2).map((c) => (
+                        <span key={c} className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded capitalize">{c}</span>
+                      ))}
+                    </div>
                   </td>
-                  <td className="px-5 py-3.5 text-center">
-                    <div className="font-semibold text-gray-700">{fmt(row.cheapReg, currency)}</div>
-                    <div className="text-xs text-gray-400">{row.cheapRegName}</div>
+
+                  {/* Cheapest Reg */}
+                  <td className="px-4 py-3.5 text-center">
+                    <div className="font-semibold text-gray-800">{fmt(row.cheapReg, currency)}</div>
+                    <div className="text-[11px] text-gray-400 mt-0.5">{row.cheapRegName}</div>
                   </td>
-                  <td className="px-5 py-3.5 text-center">
+
+                  {/* Cheapest Renewal */}
+                  <td className="px-4 py-3.5 text-center">
                     <div className="font-bold text-primary-600">{fmt(row.cheapRenew, currency)}</div>
-                    <div className="text-xs text-gray-400">{row.cheapRenewName}</div>
+                    <div className="text-[11px] text-gray-400 mt-0.5">{row.cheapRenewName}</div>
                   </td>
-                  <td className="px-5 py-3.5 text-center">
+
+                  {/* Promo Code */}
+                  <td className="px-4 py-3.5 text-center">
+                    {row.cheapRegPromo ? (
+                      <button
+                        onClick={() => copyCode(row.cheapRegPromo!)}
+                        title="Click to copy promo code"
+                        className={cn(
+                          'inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-700 rounded-lg px-2.5 py-1 font-mono text-xs font-bold transition-colors',
+                          copied === row.cheapRegPromo && 'bg-green-50 border-green-200 text-green-700',
+                        )}
+                      >
+                        {copied === row.cheapRegPromo
+                          ? <CheckCircle2 className="h-3 w-3 text-green-500" />
+                          : <Copy className="h-3 w-3 opacity-60" />}
+                        {row.cheapRegPromo}
+                      </button>
+                    ) : (
+                      <span className="text-gray-300 text-xs">—</span>
+                    )}
+                  </td>
+
+                  {/* WHOIS Privacy */}
+                  <td className="px-4 py-3.5 text-center">
                     {row.whoisPrivacy
-                      ? <span className="inline-flex items-center gap-1 text-green-600 text-xs font-medium"><CheckCircle className="h-3.5 w-3.5" />Yes</span>
-                      : <span className="text-xs text-gray-400">—</span>
+                      ? <span className="inline-flex items-center gap-1 text-green-600 text-xs font-medium"><CheckCircle className="h-3.5 w-3.5" />Free</span>
+                      : <span className="text-xs text-gray-300">—</span>
                     }
                   </td>
-                  <td className="px-5 py-3.5 text-center">
+
+                  {/* DNSSEC */}
+                  <td className="px-4 py-3.5 text-center">
                     {row.dnssec
                       ? <span className="inline-flex items-center gap-1 text-green-600 text-xs font-medium"><Shield className="h-3.5 w-3.5" />Yes</span>
-                      : <span className="text-xs text-gray-400">—</span>
+                      : <span className="text-xs text-gray-300">—</span>
                     }
                   </td>
-                  <td className="px-5 py-3.5 text-center text-xs text-gray-500">
-                    {row.popularity ? `#${row.popularity.toLocaleString()}` : '—'}
+
+                  {/* Popularity */}
+                  <td className="px-4 py-3.5 text-center">
+                    {row.popularity
+                      ? <span className="text-xs font-medium text-gray-500">#{row.popularity.toLocaleString()}</span>
+                      : <span className="text-gray-300 text-xs">—</span>}
                   </td>
                 </tr>
               ))}
