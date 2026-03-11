@@ -21,6 +21,5 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
       <main style={{ paddingTop: 'var(--header-h, 64px)' }}>{children}</main>
       <Footer />
     </>
-    </>
   );
 }
