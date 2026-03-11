@@ -33,13 +33,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (5MB max)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    // Validate file size (4MB max — keep in sync with client-side guard)
+    const maxSize = 4 * 1024 * 1024; // 4MB
     if (file.size > maxSize) {
       console.error('File too large:', file.size);
       return NextResponse.json(
-        { error: `File size (${Math.round(file.size / 1024 / 1024)}MB) exceeds 5MB limit` },
-        { status: 400 }
+        { error: `Image too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum allowed size is 4MB.` },
+        { status: 413 }
       );
     }
 

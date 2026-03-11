@@ -156,6 +156,13 @@ export default function WordPressEditor({ value, onChange, placeholder, classNam
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Client-side size guard (4MB) – stops 413 before it reaches the server
+    if (file.size > 4 * 1024 * 1024) {
+      alert('Image too large. Please use an image under 4MB.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
     setIsUploadingImage(true);
     try {
       const formData = new FormData();
@@ -166,7 +173,17 @@ export default function WordPressEditor({ value, onChange, placeholder, classNam
         body: formData,
       });
 
-      const data = await response.json();
+      // Read as text first so a non-JSON 413 page doesn't crash .json()
+      const text = await response.text();
+      let data: { error?: string; url?: string } = {};
+      try {
+        data = JSON.parse(text);
+      } catch {
+        if (response.status === 413) {
+          throw new Error('Image is too large. The server rejected it — please use an image under 4MB.');
+        }
+        throw new Error(`Upload failed (${response.status})`);
+      }
       if (!response.ok) throw new Error(data.error || 'Upload failed');
 
       // eslint-disable-next-line @next/next/no-img-element
