@@ -1,0 +1,36 @@
+{
+  "site": {
+    "name": "CheapestDomain",
+    "tagline": "Find the Cheapest Domains Worldwide",
+    "contactEmail": "support@cheapestdomain.com",
+    "logoUrl": "",
+    "faviconUrl": "",
+    "maintenanceMode": false
+  },
+  "api": {
+    "whmcsUrl": "",
+    "whmcsApiIdentifier": "",
+    "whmcsApiSecret": "",
+    "truehostApiKey": "",
+    "resellerApiUrl": ""
+  },
+  "email": {
+    "smtpHost": "",
+    "smtpPort": 587,
+    "smtpUser": "",
+    "smtpPassword": "",
+    "fromName": "CheapestDomain",
+    "fromAddress": "noreply@cheapestdomain.com"
+  },
+  "currency": {
+    "default": "USD",
+    "kesRate": 130,
+    "showMultipleCurrencies": true
+  },
+  "seo": {
+    "metaTitleTemplate": "%s | CheapestDomain",
+    "defaultMetaDescription": "Find and compare the cheapest domain registrations worldwide. Best prices on .com, .net, .co.ke and more.",
+    "googleAnalyticsId": "",
+    "googleSearchConsoleId": ""
+  }
+}

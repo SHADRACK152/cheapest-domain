@@ -36,7 +36,7 @@ export default function AdminMediaPage() {
     const form = new FormData();
     Array.from(picked).forEach(f => form.append('file', f));
     try {
-      const res = await fetch('/api/upload', { method: 'POST', body: form });
+      const res = await fetch('/api/upload/image', { method: 'POST', body: form });
       const data = await res.json();
       if (data.url) {
         const f = picked[0];
