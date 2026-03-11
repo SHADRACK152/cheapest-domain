@@ -1,0 +1,33 @@
+{
+  "authors": [
+    {
+      "id": "1",
+      "name": "Ricky Mark Okello",
+      "email": "ricky@cheapestdomains.co.ke",
+      "role": "Co-Founder",
+      "bio": "Founder of CheapestDomains.co.ke. Passionate about transparent domain pricing.",
+      "avatar": "",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Shadrack Mark emadau",
+      "email": "shadrack@cheapestdomains.co.ke",
+      "role": "CTO",
+      "bio": "Building the infrastructure that powers millions of domains globally.",
+      "avatar": "",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "banners": [],
+  "categories": [
+    { "id": "1", "name": "Guide",     "slug": "guide",     "color": "blue",   "description": "Step-by-step guides for domain owners", "postCount": 0 },
+    { "id": "2", "name": "Education", "slug": "education", "color": "purple", "description": "Learn about domain names and the web",   "postCount": 0 },
+    { "id": "3", "name": "Security",  "slug": "security",  "color": "red",    "description": "Domain security best practices",         "postCount": 0 },
+    { "id": "4", "name": "Tutorial",  "slug": "tutorial",  "color": "green",  "description": "Hands-on tutorials and how-tos",          "postCount": 0 },
+    { "id": "5", "name": "SEO",       "slug": "seo",       "color": "orange", "description": "SEO and online marketing tips",            "postCount": 0 },
+    { "id": "6", "name": "News",      "slug": "news",      "color": "indigo", "description": "Industry news and updates",               "postCount": 0 }
+  ],
+  "coupons": [],
+  "dynamicPages": []
+}

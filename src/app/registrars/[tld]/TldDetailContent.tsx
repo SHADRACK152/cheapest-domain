@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { CheckCircle, Shield, Lock, ExternalLink, ArrowLeft, Trophy } from 'lucide-react';
 import { USD_TO_KES_RATE } from '@/lib/currency';
-import type { TldEntry } from '@/lib/tld-registrar-data';
+import type { CatalogEntry } from '@/lib/tld-catalog';
 
 type Currency = 'USD' | 'KES';
 
@@ -14,7 +14,7 @@ function fmt(usd: number, currency: Currency) {
     : `$${usd.toFixed(2)}`;
 }
 
-export default function TldDetailContent({ entry }: { entry: TldEntry }) {
+export default function TldDetailContent({ entry }: { entry: CatalogEntry }) {
   const [currency, setCurrency] = useState<Currency>('USD');
 
   const sorted = [...entry.prices].sort((a, b) => a.renew - b.renew);

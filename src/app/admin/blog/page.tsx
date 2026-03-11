@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Plus,
@@ -25,7 +24,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/auth-context';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -64,8 +62,6 @@ const statusColors: Record<string, string> = {
 };
 
 export default function AdminBlogPage() {
-  const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeStatus, setActiveStatus] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -74,10 +70,8 @@ export default function AdminBlogPage() {
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
 
   useEffect(() => {
-    if (isAuthenticated && user?.email === 'admin@truehost.co.ke') {
-      fetchPosts();
-    }
-  }, [isAuthenticated, user]);
+    fetchPosts();
+  }, []);
 
   async function fetchPosts() {
     try {
@@ -133,20 +127,12 @@ export default function AdminBlogPage() {
     setSelectedPosts([]);
   }
 
-  if (isLoading || isLoadingPosts) {
+  if (isLoadingPosts) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading...</p>
-        </div>
+      <div className="flex items-center justify-center py-24">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div>
       </div>
     );
-  }
-
-  if (!isAuthenticated || user?.email !== 'admin@truehost.co.ke') {
-    router.push('/login?redirect=/admin/blog');
-    return null;
   }
 
   // Calculate stats
@@ -174,8 +160,7 @@ export default function AdminBlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-12">
-      <div className="container-wide">
+    <div>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -184,13 +169,6 @@ export default function AdminBlogPage() {
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Link href="/admin">
-                  <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700">
-                    ← Back to Dashboard
-                  </Button>
-                </Link>
-              </div>
               <h1 className="text-3xl md:text-4xl font-bold text-[#111111] flex items-center gap-3">
                 <FileText className="h-8 w-8 text-primary-600" />
                 Blog Management
@@ -506,6 +484,5 @@ export default function AdminBlogPage() {
           </motion.div>
         )}
       </div>
-    </div>
   );
 }

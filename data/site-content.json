@@ -1,0 +1,118 @@
+{
+  "home": {
+    "hero": {
+      "badge": "Transparent Pricing — No Renewal Surprises",
+      "headline": "Cheapest Domains.",
+      "headlineAccent": "No Hidden Fees.",
+      "subheadline": "Compare real prices across registrars — register and renew affordably."
+    },
+    "features": {
+      "headline": "Why Choose CheapestDomains",
+      "subheadline": "Everything you need to manage your online presence, at prices that make sense."
+    },
+    "cta": {
+      "headline": "Ready to Find the Best Domain Deal?",
+      "body": "Compare domain prices and avoid expensive renewals. Our mission is to help you find affordable domain names without misleading pricing structures.",
+      "primaryBtn": "Compare Domain Deals",
+      "secondaryBtn": "Read Our Blog"
+    }
+  },
+  "about": {
+    "pageTitle": "About CheapestDomains",
+    "pageDescription": "We help you find the most affordable domain names with complete pricing transparency.",
+    "team": [
+      {
+        "id": "1",
+        "initials": "JM",
+        "name": "Ricky Mark Okello",
+        "role": "Co-Founder",
+        "bio": "Ricky Mark is the founder of CheapestDomains.co.ke, a platform dedicated to helping businesses and individuals easily compare domain registration, renewal, and transfer prices. His goal is to make domain ownership more transparent and affordable by giving users the information they need to choose the best registrar without hidden costs."
+      },
+      {
+        "id": "2",
+        "initials": "SM",
+        "name": "Shadrack Mark emadau",
+        "role": "CTO",
+        "bio": "Building the infrastructure that powers millions of domains globally."
+      },
+      {
+        "id": "3",
+        "initials": "MN",
+        "name": "Maria Nyaduse",
+        "role": "Head of Support",
+        "bio": "Ensuring every customer gets world-class support, 24 hours a day."
+      }
+    ],
+    "values": [
+      { "id": "1", "icon": "Eye", "title": "Transparency", "description": "Showing both registration and renewal prices so you know the real long-term cost." },
+      { "id": "2", "icon": "Search", "title": "Clarity", "description": "Explaining domain costs in simple, easy-to-understand language." },
+      { "id": "3", "icon": "Search", "title": "Research", "description": "Comparing multiple domain registrars so you get the full picture." },
+      { "id": "4", "icon": "DollarSign", "title": "Value", "description": "Helping you find the best long-term domain deals — not just the cheapest first year." }
+    ],
+    "whatWeDo": [
+      "Find the cheapest domain names available today",
+      "Compare domain registration and renewal prices",
+      "Identify registrars with fair and affordable renewal fees",
+      "Avoid misleading introductory domain deals",
+      "Make informed decisions before buying a domain"
+    ],
+    "whoItsFor": [
+      "Entrepreneurs starting an online business",
+      "Developers and designers registering domains for projects",
+      "Bloggers and content creators launching new websites",
+      "Anyone searching for the best place to buy cheap domain names"
+    ],
+    "ourMission": [
+      "Find cheap and affordable domain names",
+      "Compare services before making a decision",
+      "Avoid hidden fees and misleading promotions",
+      "Get reliable services without paying inflated prices"
+    ]
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "description": "Have a question or need help? We're here for you 24/7. Reach out and we'll respond as quickly as possible.",
+    "email": "support@cheapestdomains.com",
+    "phone": "+254 700 000 000",
+    "address": "Nairobi, Kenya",
+    "hours": "Mon – Sun, 24/7",
+    "whatsapp": ""
+  },
+  "blog": {
+    "title": "Our Blog",
+    "description": "Stay up to date with the latest news, guides and tutorials about domain names.",
+    "featuredLabel": "Featured",
+    "categories": ["Guide", "Education", "Security", "Tutorial", "SEO", "News"]
+  },
+  "tlds": {
+    "title": "Domain Pricing",
+    "description": "Compare domain registration and renewal prices across all TLDs.",
+    "perPage": 25
+  },
+  "tldCategory": {
+    "title": "Browse Domains by Category",
+    "description": "Find the perfect domain extension for your brand, industry or region."
+  },
+  "tldAz": {
+    "title": "All Domain Extensions A–Z",
+    "description": "Browse our complete list of 1,348+ domain extensions and their pricing."
+  },
+  "registrars": {
+    "title": "Compare Domain Registrars",
+    "description": "Find the best registrar for your domain with transparent pricing and renewal rates.",
+    "perPage": 25
+  },
+  "privacy": {
+    "lastUpdated": "February 15, 2026",
+    "content": "# Privacy Policy\n\nCheapestDomains, operated by TrueHost Kenya, is committed to protecting your privacy.\n\n## 1. Introduction\nThis Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our domain registration and management services.\n\n## 2. Information We Collect\nWhen you register an account or domain, we collect contact information, account information, payment information, and domain registration data.\n\n## 3. How We Use Your Information\nWe use collected information for service delivery, communication, and improvement & analytics.\n\n## 4. Your Rights\nYou have the right to access, correct, or delete your personal data. Contact us at support@cheapestdomains.com.\n\n## 5. Contact Us\nFor privacy concerns, contact us at support@cheapestdomains.com"
+  },
+  "terms": {
+    "lastUpdated": "February 15, 2026",
+    "content": "# Terms of Service\n\nBy accessing and using CheapestDomains (\"Service\"), you agree to be bound by these Terms of Service (\"Terms\").\n\n## 1. Agreement to Terms\nIf you disagree with any part of the terms, you may not access the Service.\n\n## 2. Domain Registration Services\nWhen you register a domain through our Service, you enter into a registration agreement with the respective domain registry.\n\n## 3. Pricing and Payment\nDomain registration and renewal fees are listed on our website. All fees are non-refundable except as required by law.\n\n## 4. Acceptable Use\nYou may not use our Service for any illegal purposes or to violate any applicable laws.\n\n## 5. Contact Us\nFor questions about these Terms, contact us at support@cheapestdomains.com"
+  },
+  "promoCodes": {
+    "title": "Promo Codes",
+    "description": "Save money on domain registrations and renewals with our promo codes.",
+    "codes": []
+  }
+}

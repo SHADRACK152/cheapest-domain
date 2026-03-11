@@ -15,11 +15,14 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrency] = useState<Currency>('KES');
 
-  // Load currency preference from localStorage
+  // Load currency preference from localStorage — KES is always the default
   useEffect(() => {
     const saved = localStorage.getItem('preferred-currency');
-    if (saved === 'KES' || saved === 'USD') {
-      setCurrency(saved);
+    if (saved === 'KES') {
+      setCurrency('KES');
+    } else {
+      // Reset any stale non-KES preference back to KES
+      localStorage.setItem('preferred-currency', 'KES');
     }
   }, []);
 

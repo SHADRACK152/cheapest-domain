@@ -56,11 +56,16 @@ export async function POST(request: NextRequest) {
           },
         });
       } catch (error) {
-        console.error('TrueHost login failed:', error);
-        return NextResponse.json(
-          { error: error instanceof Error ? error.message : 'Authentication failed' },
-          { status: 401 }
-        );
+        // Network errors (DNS failure, timeout) — fall through to local auth
+        const isNetworkError = error instanceof TypeError && (error as any).cause?.code === 'ENOTFOUND';
+        if (!isNetworkError) {
+          console.error('TrueHost login failed:', error);
+          return NextResponse.json(
+            { error: error instanceof Error ? error.message : 'Authentication failed' },
+            { status: 401 }
+          );
+        }
+        // Silently fall through to local admin auth when API host is unreachable
       }
     }
 

@@ -8,7 +8,7 @@ import {
   ArrowUpDown, X, CheckCircle, Shield
 } from 'lucide-react';
 import { USD_TO_KES_RATE } from '@/lib/currency';
-import { TLD_DATA, cheapest } from '@/lib/tld-registrar-data';
+import { TLD_CATALOG, cheapestCatalog } from '@/lib/tld-catalog';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -49,8 +49,8 @@ function fmt(usd: number, currency: Currency) {
 }
 
 // Pre-compute cheapest prices for all TLDs once at module load
-const ALL_ROWS: TldRow[] = TLD_DATA.map((e) => {
-  const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapest(e);
+const ALL_ROWS: TldRow[] = TLD_CATALOG.map((e) => {
+  const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapestCatalog(e);
   return {
     tld: e.tld,
     type: e.type,

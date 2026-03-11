@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Users, 
@@ -12,30 +11,15 @@ import {
   Phone,
   Calendar,
   Ban,
-  CheckCircle2,
-  ArrowLeft
+  CheckCircle2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/contexts/auth-context';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { getAllUsers, getDomainsByUserEmail } from '@/lib/system-data';
 
 export default function AdminUsersPage() {
-  const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login?redirect=/admin/users');
-    }
-    
-    if (!isLoading && isAuthenticated && user?.email !== 'admin@truehost.co.ke') {
-      router.push('/');
-    }
-  }, [isAuthenticated, isLoading, user, router]);
 
   // Get real users from system data
   const systemUsers = getAllUsers().map(u => ({
@@ -54,40 +38,16 @@ export default function AdminUsersPage() {
     u.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || user?.email !== 'admin@truehost.co.ke') {
-    return null;
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container-wide">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {/* Header */}
-          <Link href="/admin">
-            <Button variant="ghost" size="sm" className="mb-4 gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Admin
-            </Button>
-          </Link>
-
+    <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-[#111111] mb-2">User Management</h1>
-              <p className="text-gray-500">{filteredUsers.length} total users</p>
+              <h1 className="text-2xl font-bold text-[#111111] mb-1">User Management</h1>
+              <p className="text-gray-500 text-sm">{filteredUsers.length} total users</p>
             </div>
             <div className="flex gap-3">
               <Button variant="outline" size="sm" className="gap-2">
@@ -195,7 +155,6 @@ export default function AdminUsersPage() {
             </div>
           </div>
         </motion.div>
-      </div>
     </div>
   );
 }

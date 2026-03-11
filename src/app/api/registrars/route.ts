@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { TLD_DATA, cheapest, TldEntry } from '@/lib/tld-registrar-data';
+import { TLD_CATALOG, cheapestCatalog, CatalogEntry } from '@/lib/tld-catalog';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -16,10 +16,10 @@ export async function GET(request: Request) {
 
   // ── Single TLD detail ───────────────────────────────────────────────────
   if (tld) {
-    const entry = TLD_DATA.find((e) => e.tld === tld);
+    const entry = TLD_CATALOG.find((e) => e.tld === tld);
     if (!entry) return NextResponse.json({ error: 'TLD not found' }, { status: 404 });
 
-    const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapest(entry);
+    const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapestCatalog(entry);
     const sortedPrices = [...entry.prices].sort((a, b) => a.renew - b.renew);
 
     return NextResponse.json({
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
   }
 
   // ── List + filter ───────────────────────────────────────────────────────
-  let results: TldEntry[] = [...TLD_DATA];
+  let results: CatalogEntry[] = [...TLD_CATALOG];
 
   if (search)   results = results.filter((e) => e.tld.includes(search.toLowerCase()));
   if (type)     results = results.filter((e) => e.type === type);
@@ -41,15 +41,15 @@ export async function GET(request: Request) {
 
   // Price filters (based on cheapest available price)
   results = results.filter((e) => {
-    const { cheapReg, cheapRenew } = cheapest(e);
+    const { cheapReg, cheapRenew } = cheapestCatalog(e);
     return cheapReg <= maxReg && cheapRenew <= maxRenew;
   });
 
   // Sort
   if (sortField === 'reg') {
-    results.sort((a, b) => cheapest(a).cheapReg - cheapest(b).cheapReg);
+    results.sort((a, b) => cheapestCatalog(a).cheapReg - cheapestCatalog(b).cheapReg);
   } else if (sortField === 'renew') {
-    results.sort((a, b) => cheapest(a).cheapRenew - cheapest(b).cheapRenew);
+    results.sort((a, b) => cheapestCatalog(a).cheapRenew - cheapestCatalog(b).cheapRenew);
   } else {
     // popularity (descending)
     results.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
   const paginated = results.slice((page - 1) * perPage, page * perPage);
 
   const data = paginated.map((e) => {
-    const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapest(e);
+    const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapestCatalog(e);
     return {
       tld: e.tld,
       type: e.type,
@@ -68,6 +68,8 @@ export async function GET(request: Request) {
       popularity: e.popularity,
       whoisPrivacy: e.whoisPrivacy,
       dnssec: e.dnssec,
+      brand: e.brand,
+      operator: e.operator,
       cheapReg,
       cheapRenew,
       cheapRegName,

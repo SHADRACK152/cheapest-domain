@@ -254,12 +254,18 @@ async function executeTool(toolName: string, param: string): Promise<string> {
         const result = await searchDomain(domain);
         
         if (result.exact && result.exact.available) {
-          return `✅ AVAILABLE! ${domain} is up for grabs! 🎉\n\n💰 Price: $${result.exact.price}/year\n\n🚀 Ready to register? I can add it to your cart right now!`;
+          const priceDisplay = result.exact.priceKES
+            ? `KES ${result.exact.priceKES.toLocaleString('en-KE')}`
+            : `KES ${Math.round(result.exact.price * 150).toLocaleString('en-KE')}`;
+          return `✅ AVAILABLE! ${domain} is up for grabs! 🎉\n\n💰 Price: ${priceDisplay}/year\n\n🚀 Ready to register? I can add it to your cart right now!`;
         } else {
           // Suggest alternatives from suggestions
           const alternatives = result.suggestions
             .slice(0, 3)
-            .map(d => `• ${d.fullDomain} - $${d.price}/yr`)
+            .map(d => {
+              const p = d.priceKES ? `KES ${d.priceKES.toLocaleString('en-KE')}` : `KES ${Math.round(d.price * 150).toLocaleString('en-KE')}`;
+              return `• ${d.fullDomain} - ${p}/yr`;
+            })
             .join('\n');
           
           return `❌ Oops! ${domain} is already taken.\n\n💡 But check out these alternatives:\n${alternatives}\n\nWant me to add any of these to your cart?`;
@@ -315,7 +321,10 @@ async function executeTool(toolName: string, param: string): Promise<string> {
         
         if (result.exact && result.exact.available) {
           // Return a special marker that the frontend can intercept
-          return `🛒 CART_ACTION:ADD:${domain}:${result.exact.price}\n\n✨ Perfect! I'm adding ${domain} to your cart!\n\n💰 Price: $${result.exact.price}/year\n\n👉 Ready to checkout? Just say "checkout" and I'll take you there!`;
+          const cartPriceDisplay = result.exact.priceKES
+            ? `KES ${result.exact.priceKES.toLocaleString('en-KE')}`
+            : `KES ${Math.round(result.exact.price * 150).toLocaleString('en-KE')}`;
+          return `🛒 CART_ACTION:ADD:${domain}:${result.exact.price}\n\n✨ Perfect! I'm adding ${domain} to your cart!\n\n💰 Price: ${cartPriceDisplay}/year\n\n👉 Ready to checkout? Just say "checkout" and I'll take you there!`;
         } else {
           return `❌ Sorry, ${domain} isn't available for registration. Want me to check alternative extensions?`;
         }

@@ -3,7 +3,10 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Tag, RefreshCw } from 'lucide-react';
 import { DOMAIN_EXTENSIONS } from '@/lib/constants';
+import { useCurrency } from '@/contexts/currency-context';
 import Link from 'next/link';
+
+const KES_RATE = 150; // 1 USD = 150 KES
 
 const container = {
   hidden: { opacity: 0 },
@@ -19,7 +22,13 @@ const item = {
 };
 
 export function PricingSection() {
+  const { currency } = useCurrency();
   const popularExtensions = DOMAIN_EXTENSIONS.filter((ext) => ext.popular);
+
+  function fmtPrice(usd: number) {
+    if (currency === 'KES') return `KES ${Math.round(usd * KES_RATE).toLocaleString('en-KE')}`;
+    return `$${usd.toFixed(2)}`;
+  }
 
   return (
     <section className="py-20 md:py-28 bg-gray-50">
@@ -82,13 +91,13 @@ export function PricingSection() {
                   <div className="flex items-end gap-1">
                     <Tag className="h-4 w-4 text-amber-600 mb-1 shrink-0" />
                     <span className="text-3xl font-bold text-[#111111]">
-                      ${ext.price.toFixed(2)}
+                      {fmtPrice(ext.price)}
                     </span>
                     <span className="text-sm text-gray-400 mb-0.5">/yr</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs text-gray-400">
                     <RefreshCw className="h-3 w-3 shrink-0" />
-                    Renews at ${ext.renewPrice.toFixed(2)}/yr
+                    Renews at {fmtPrice(ext.renewPrice)}/yr
                   </div>
                 </div>
 

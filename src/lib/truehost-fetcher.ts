@@ -26,8 +26,20 @@ export function convertKEStoUSD(kes: number): number {
 }
 
 // TLD prices loaded directly from the committed WHMCS price cache (already in KES)
-// Refresh with: node scripts/fetch-whmcs-prices.js then commit data/tld-prices.json
-const TLD_PRICES = tldPricesData.tlds as Record<string, { reg: number; renew: number }>;
+// Refresh with: node scripts/enrich-tld-prices.js then commit data/tld-prices.json
+type TldPriceEntry = {
+  reg: number;
+  renew: number;
+  brand?: boolean;    // true = brand/corporate TLD, not publicly registrable
+  public?: boolean;   // true = available for public registration
+  registrars?: string[];
+};
+const TLD_PRICES = tldPricesData.tlds as Record<string, TldPriceEntry>;
+
+/** Returns true if the TLD is a brand/corporate domain — skip these in suggestions */
+function isBrandTld(ext: string): boolean {
+  return TLD_PRICES[ext]?.brand === true;
+}
 
 function getRegPriceKES(extension: string): number {
   return TLD_PRICES[extension]?.reg ?? 1500;
@@ -60,6 +72,7 @@ export async function fetchTrueHostResults(query: string): Promise<SearchResult>
   console.log(`🔍 Checking real availability for: ${domainName}${extension}`);
 
   // Build list of domains to check (exact match + alternatives)
+  // Filter out brand/corporate TLDs that are not publicly registrable
   const domainsToCheck = [
     `${domainName}${extension}`,
     // Kenya TLDs (priority for TrueHost)
@@ -76,7 +89,10 @@ export async function fetchTrueHostResults(query: string): Promise<SearchResult>
     `${domainName}.africa`,
     `${domainName}.io`,
     `${domainName}.ng`,
-  ];
+  ].filter((domain) => {
+    const ext = domain.substring(domain.indexOf('.'));
+    return !isBrandTld(ext);
+  });
 
   // Remove duplicates (cap at 8 to keep total response well within proxy timeout)
   const uniqueDomains = Array.from(new Set(domainsToCheck)).slice(0, 8);

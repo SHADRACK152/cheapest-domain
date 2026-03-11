@@ -1,9 +1,9 @@
 ﻿import { notFound } from 'next/navigation';
-import { TLD_DATA } from '@/lib/tld-registrar-data';
+import { TLD_CATALOG } from '@/lib/tld-catalog';
 import TldDetailContent from './TldDetailContent';
 
 export async function generateStaticParams() {
-  return TLD_DATA.map((entry) => ({ tld: entry.tld.replace(/^\./, '') }));
+  return TLD_CATALOG.map((entry) => ({ tld: entry.tld.replace(/^\./, '') }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ tld: string }> }) {
@@ -18,7 +18,7 @@ export default async function TldDetailPage({ params }: { params: Promise<{ tld:
   const { tld: slug } = await params;
   const tldKey = '.' + slug;
 
-  const entry = TLD_DATA.find((e) => e.tld === tldKey);
+  const entry = TLD_CATALOG.find((e) => e.tld === tldKey);
   if (!entry) notFound();
 
   return <TldDetailContent entry={entry} />;

@@ -1,5 +1,6 @@
 import { Domain, SearchResult } from '@/types';
 import { DOMAIN_EXTENSIONS } from './constants';
+import { usdToKes } from './currency';
 
 // Priority: TrueHost API (Bearer) or WHMCS-style credentials > Namecheap API > Free DNS Checking
 const USE_TRUEHOST = !!process.env.TRUEHOST_API_KEY || (!!process.env.TRUEHOST_IDENTIFIER && !!process.env.TRUEHOST_SECRET && !!process.env.TRUEHOST_ENDPOINT);

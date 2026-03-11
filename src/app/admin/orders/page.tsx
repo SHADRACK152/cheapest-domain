@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   ShoppingCart, 
@@ -13,31 +12,16 @@ import {
   CheckCircle2,
   Clock,
   XCircle,
-  ArrowLeft,
   Download,
   Package
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/contexts/auth-context';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { getAllOrders } from '@/lib/system-data';
 
 export default function AdminOrdersPage() {
-  const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login?redirect=/admin/orders');
-    }
-    
-    if (!isLoading && isAuthenticated && user?.email !== 'admin@truehost.co.ke') {
-      router.push('/');
-    }
-  }, [isAuthenticated, isLoading, user, router]);
 
   // Get real orders from system data
   const systemOrders = getAllOrders().map(o => ({
@@ -62,39 +46,16 @@ export default function AdminOrdersPage() {
     o.domains.some(d => d.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || user?.email !== 'admin@truehost.co.ke') {
-    return null;
-  }
-
   const totalRevenue = systemOrders
     .filter(o => o.status === 'completed')
     .reduce((sum, o) => sum + o.total, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container-wide">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Link href="/admin">
-            <Button variant="ghost" size="sm" className="mb-4 gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Admin
-            </Button>
-          </Link>
-
+    <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <div>
               <h1 className="text-3xl font-bold text-[#111111] mb-2">Order Management</h1>
@@ -241,7 +202,6 @@ export default function AdminOrdersPage() {
             </div>
           </div>
         </motion.div>
-      </div>
     </div>
   );
 }

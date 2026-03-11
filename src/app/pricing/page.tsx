@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DomainExtension } from '@/types';
+import { useCurrency } from '@/contexts/currency-context';
 import { cn } from '@/lib/utils';
+
+const KES_RATE = 150;
 
 const container = {
   hidden: { opacity: 0 },
@@ -23,11 +26,17 @@ const item = {
 };
 
 export default function PricingPage() {
+  const { currency } = useCurrency();
   const [showAll, setShowAll] = useState(false);
   const [extensions, setExtensions] = useState<DomainExtension[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dataSource, setDataSource] = useState<string>('');
+
+  function fmtPrice(usd: number) {
+    if (currency === 'KES') return `KES ${Math.round(usd * KES_RATE).toLocaleString('en-KE')}`;
+    return `$${usd.toFixed(2)}`;
+  }
 
   useEffect(() => {
     async function fetchPricing() {
@@ -173,12 +182,12 @@ export default function PricingPage() {
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-4xl font-bold text-[#111111]">
-                        ${ext.price.toFixed(2)}
+                        {fmtPrice(ext.price)}
                       </span>
                       <span className="text-sm text-gray-400">/yr</span>
                     </div>
                     <p className="text-xs text-gray-400 mt-1">
-                      Renews at ${ext.renewPrice.toFixed(2)}/yr
+                      Renews at {fmtPrice(ext.renewPrice)}/yr
                     </p>
                   </div>
 

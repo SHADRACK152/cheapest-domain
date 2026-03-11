@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   BarChart3, 
@@ -9,44 +7,14 @@ import {
   Users,
   Globe,
   DollarSign,
-  ArrowLeft,
   ArrowUp,
   ArrowDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/auth-context';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { getStats, getMonthlyRevenue, getTopExtensions, getAllDomains } from '@/lib/system-data';
+import { getStats, getMonthlyRevenue, getTopExtensions } from '@/lib/system-data';
 
 export default function AdminAnalyticsPage() {
-  const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login?redirect=/admin/analytics');
-    }
-    
-    if (!isLoading && isAuthenticated && user?.email !== 'admin@truehost.co.ke') {
-      router.push('/');
-    }
-  }, [isAuthenticated, isLoading, user, router]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || user?.email !== 'admin@truehost.co.ke') {
-    return null;
-  }
 
   // Get real data from system
   const stats = getStats();
@@ -64,23 +32,15 @@ export default function AdminAnalyticsPage() {
   const avgOrderValue = stats.orders.completed > 0 ? totalRevenue / stats.orders.completed : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container-wide">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Link href="/admin">
-            <Button variant="ghost" size="sm" className="mb-4 gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Admin
-            </Button>
-          </Link>
-
+    <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-[#111111] mb-2">Analytics & Reports</h1>
-              <p className="text-gray-500">Track your platform&apos;s performance</p>
+              <h1 className="text-2xl font-bold text-[#111111] mb-1">Analytics &amp; Reports</h1>
+              <p className="text-gray-500 text-sm">Track your platform&apos;s performance</p>
             </div>
             <div className="flex gap-3">
               <Button variant="outline" size="sm">Last 30 Days</Button>
@@ -254,7 +214,6 @@ export default function AdminAnalyticsPage() {
             </div>
           </motion.div>
         </motion.div>
-      </div>
     </div>
   );
 }

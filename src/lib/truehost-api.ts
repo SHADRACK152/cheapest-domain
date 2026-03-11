@@ -130,7 +130,7 @@ export async function checkTrueHostAvailability(domains: string[]): Promise<True
         if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
           const out: TrueHostDomainCheck[] = domains.map(d => {
             const info = payload[d] || payload[d.toLowerCase()] || {};
-            const available = info.available ?? info.is_available ?? (info.status === 'available') ?? (info === 'available');
+            const available = (info.available ?? info.is_available ?? (info.status === 'available')) || (info === 'available');
             const price = info.price ?? info.registration_price ?? info.reg_price ?? undefined;
             const premium = info.premium ?? info.is_premium ?? false;
             return { domain: d, available: Boolean(available), price, premium };

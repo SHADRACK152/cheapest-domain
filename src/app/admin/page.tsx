@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   Users,
@@ -32,42 +31,15 @@ interface BlogPost {
 }
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user } = useAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login?redirect=/admin');
-    }
-    if (!isLoading && isAuthenticated && user?.email !== 'admin@truehost.co.ke') {
-      router.push('/');
-    }
-  }, [isAuthenticated, isLoading, user, router]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetch('/api/blog')
-        .then(r => r.ok ? r.json() : null)
-        .then(data => { if (data?.posts) setPosts(data.posts); })
-        .catch(() => {});
-    }
-  }, [isAuthenticated]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading admin panel...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || user?.email !== 'admin@truehost.co.ke') {
-    return null;
-  }
+    fetch('/api/blog')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data?.posts) setPosts(data.posts); })
+      .catch(() => {});
+  }, []);
 
   const systemStats = getStats();
   const firstName = user?.name?.split(' ')[0] || 'Admin';
@@ -144,8 +116,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div>
 
         {/* Header */}
         <motion.div
@@ -299,7 +270,6 @@ export default function AdminDashboardPage() {
 
           </div>
         </div>
-      </div>
     </div>
   );
 }

@@ -338,7 +338,7 @@ function SearchContent() {
                                 <p className="text-xs text-gray-400">Renewal: KES {results.exact.renewPriceKES}</p>
                               )}
                             </div>
-                            <Button size="lg" className="flex-shrink-0 h-12 px-6" onClick={() => { addItem(results.exact); router.push('/cart'); }}>
+                            <Button size="lg" className="flex-shrink-0 h-12 px-6" onClick={() => { if (results.exact) { addItem(results.exact); router.push('/cart'); } }}>
                               <ShoppingCart className="h-5 w-5 mr-2" />
                               Register Now
                             </Button>
