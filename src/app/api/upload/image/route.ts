@@ -16,12 +16,37 @@ function getStorageProvider() {
   return (process.env.IMAGE_STORAGE_PROVIDER || 'local').toLowerCase();
 }
 
+function getCloudinaryConfigFromUrl() {
+  const raw = process.env.CLOUDINARY_URL;
+  if (!raw) return null;
+
+  try {
+    const parsed = new URL(raw);
+    if (!parsed.hostname || !parsed.username || !parsed.password) return null;
+
+    return {
+      cloud_name: parsed.hostname,
+      api_key: decodeURIComponent(parsed.username),
+      api_secret: decodeURIComponent(parsed.password),
+      secure: true,
+    };
+  } catch {
+    return null;
+  }
+}
+
 function hasCloudinaryConfig() {
+  if (getCloudinaryConfigFromUrl()) return true;
+
   return Boolean(
     process.env.CLOUDINARY_CLOUD_NAME &&
     process.env.CLOUDINARY_API_KEY &&
     process.env.CLOUDINARY_API_SECRET
   );
+}
+
+function isReadOnlyDeployment() {
+  return process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
 }
 
 function sanitizeFilename(name: string) {
@@ -35,12 +60,15 @@ function getPublicId(originalName: string) {
 }
 
 async function uploadToCloudinary(buffer: Buffer, originalName: string, mimeType: string) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true,
-  });
+  const urlConfig = getCloudinaryConfigFromUrl();
+  cloudinary.config(
+    urlConfig || {
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    }
+  );
 
   const folder = process.env.CLOUDINARY_FOLDER || 'cheapest-domain/blog';
   const publicId = getPublicId(originalName);
@@ -114,12 +142,45 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const provider = getStorageProvider();
+    const readOnlyDeployment = isReadOnlyDeployment();
 
     let uploaded;
-    if (provider === 'cloudinary' && hasCloudinaryConfig()) {
+    const shouldUseCloudinary =
+      provider === 'cloudinary' || (readOnlyDeployment && hasCloudinaryConfig());
+
+    if (shouldUseCloudinary) {
+      if (!hasCloudinaryConfig()) {
+        return NextResponse.json(
+          {
+            error: 'Cloudinary is not configured.',
+            details:
+              'Set CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME/CLOUDINARY_API_KEY/CLOUDINARY_API_SECRET in production environment variables.',
+          },
+          { status: 500 }
+        );
+      }
       uploaded = await uploadToCloudinary(buffer, file.name, file.type);
-    } else {
+    } else if (provider === 'local') {
+      if (readOnlyDeployment) {
+        return NextResponse.json(
+          {
+            error: 'Local file uploads are not supported in this deployment.',
+            details:
+              'This environment has a read-only filesystem. Set IMAGE_STORAGE_PROVIDER=cloudinary and configure Cloudinary env vars.',
+          },
+          { status: 500 }
+        );
+      }
+
       uploaded = await uploadToLocal(buffer, file.name);
+    } else {
+      return NextResponse.json(
+        {
+          error: `Unsupported IMAGE_STORAGE_PROVIDER: ${provider}`,
+          details: 'Use local or cloudinary.',
+        },
+        { status: 400 }
+      );
     }
 
     return NextResponse.json({
@@ -131,9 +192,18 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Image upload error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to upload image';
+    const isReadOnlyFsError =
+      typeof errorMessage === 'string' &&
+      (errorMessage.includes('EROFS') || errorMessage.toLowerCase().includes('read-only file system'));
+
     return NextResponse.json(
       { 
-        error: errorMessage,
+        error: isReadOnlyFsError
+          ? 'Upload failed because filesystem is read-only in this deployment.'
+          : errorMessage,
+        hint: isReadOnlyFsError
+          ? 'Configure Cloudinary in production and set IMAGE_STORAGE_PROVIDER=cloudinary.'
+          : undefined,
         details: error instanceof Error ? error.stack : undefined 
       },
       { status: 500 }
