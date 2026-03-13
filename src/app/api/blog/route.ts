@@ -15,8 +15,12 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching posts:', error);
+    const message = error instanceof Error ? error.message : '';
+    const details = message.includes('DATABASE_URL is not set')
+      ? 'DATABASE_URL is missing in this environment.'
+      : undefined;
     return NextResponse.json(
-      { error: 'Failed to fetch posts' },
+      { error: 'Failed to fetch posts', details },
       { status: 500 }
     );
   }
@@ -67,8 +71,12 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error creating post:', error);
+    const message = error instanceof Error ? error.message : '';
+    const details = message.includes('DATABASE_URL is not set')
+      ? 'DATABASE_URL is missing in this environment.'
+      : undefined;
     return NextResponse.json(
-      { error: 'Failed to create post' },
+      { error: 'Failed to create post', details },
       { status: 500 }
     );
   }

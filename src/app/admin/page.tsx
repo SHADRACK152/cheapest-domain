@@ -18,13 +18,14 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/auth-context';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { getStats } from '@/lib/system-data';
 
 interface BlogPost {
   id: string;
   title: string;
   slug: string;
+  category: string;
   status: 'draft' | 'published' | 'scheduled';
+  featuredImage: string;
   updatedAt: string;
   createdAt: string;
   author: string;
@@ -33,15 +34,16 @@ interface BlogPost {
 export default function AdminDashboardPage() {
   const { user } = useAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
 
   useEffect(() => {
     fetch('/api/blog')
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data?.posts) setPosts(data.posts); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setIsLoadingPosts(false));
   }, []);
 
-  const systemStats = getStats();
   const firstName = user?.name?.split(' ')[0] || 'Admin';
 
   function timeAgo(dateStr: string) {
@@ -54,17 +56,14 @@ export default function AdminDashboardPage() {
     return `${mins} min${mins !== 1 ? 's' : ''} ago`;
   }
 
-  const MOCK_ENTRIES: BlogPost[] = [
-    { id: '1', title: 'tlds-co',  slug: 'tlds-co',  status: 'published', updatedAt: new Date(Date.now() - 3 * 86400000).toISOString(), createdAt: '', author: '' },
-    { id: '2', title: 'tlds-org', slug: 'tlds-org', status: 'published', updatedAt: new Date(Date.now() - 3 * 86400000).toISOString(), createdAt: '', author: '' },
-    { id: '3', title: 'tlds-net', slug: 'tlds-net', status: 'published', updatedAt: new Date(Date.now() - 4 * 86400000).toISOString(), createdAt: '', author: '' },
-    { id: '4', title: 'tlds-com', slug: 'tlds-com', status: 'published', updatedAt: new Date(Date.now() - 4 * 86400000).toISOString(), createdAt: '', author: '' },
-  ];
-
-  const allPosts = posts.length > 0 ? posts : MOCK_ENTRIES;
+  const allPosts = posts;
   const publishedPosts = allPosts.filter(p => p.status === 'published');
   const draftCount = allPosts.filter(p => p.status === 'draft').length;
+  const scheduledCount = allPosts.filter(p => p.status === 'scheduled').length;
   const publishedCount = publishedPosts.length;
+  const postsWithImages = allPosts.filter(p => p.featuredImage).length;
+  const uniqueCategories = new Set(allPosts.map((p) => p.category).filter(Boolean)).size;
+  const uniqueAuthors = new Set(allPosts.map((p) => p.author).filter(Boolean)).size;
 
   const recentEdited = [...allPosts]
     .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
@@ -74,14 +73,14 @@ export default function AdminDashboardPage() {
     .slice(0, 5);
 
   const projectStats = [
-    { label: 'Entries',        value: allPosts.length || 63, icon: FileText,    color: 'text-blue-600',   bg: 'bg-blue-50'   },
-    { label: 'Assets',         value: 33,                    icon: Package,     color: 'text-purple-600', bg: 'bg-purple-50' },
-    { label: 'Content-Types',  value: 18,                    icon: LayoutGrid,  color: 'text-indigo-600', bg: 'bg-indigo-50' },
-    { label: 'Components',     value: 1,                     icon: Globe,       color: 'text-green-600',  bg: 'bg-green-50'  },
-    { label: 'Locales',        value: 1,                     icon: Languages,   color: 'text-yellow-600', bg: 'bg-yellow-50' },
-    { label: 'Admins',         value: systemStats.users.total, icon: Users,     color: 'text-red-600',    bg: 'bg-red-50'    },
-    { label: 'Webhooks',       value: 0,                     icon: Webhook,     color: 'text-gray-500',   bg: 'bg-gray-100'  },
-    { label: 'API Tokens',     value: 2,                     icon: Key,         color: 'text-teal-600',   bg: 'bg-teal-50'   },
+    { label: 'Entries',        value: allPosts.length,       icon: FileText,    color: 'text-blue-600',   bg: 'bg-blue-50'   },
+    { label: 'Assets',         value: postsWithImages,       icon: Package,     color: 'text-purple-600', bg: 'bg-purple-50' },
+    { label: 'Content-Types',  value: uniqueCategories,      icon: LayoutGrid,  color: 'text-indigo-600', bg: 'bg-indigo-50' },
+    { label: 'Published',      value: publishedCount,        icon: Globe,       color: 'text-green-600',  bg: 'bg-green-50'  },
+    { label: 'Drafts',         value: draftCount,            icon: Languages,   color: 'text-yellow-600', bg: 'bg-yellow-50' },
+    { label: 'Authors',        value: uniqueAuthors,         icon: Users,       color: 'text-red-600',    bg: 'bg-red-50'    },
+    { label: 'Scheduled',      value: scheduledCount,        icon: Webhook,     color: 'text-gray-500',   bg: 'bg-gray-100'  },
+    { label: 'Recent edits',   value: recentEdited.length,   icon: Key,         color: 'text-teal-600',   bg: 'bg-teal-50'   },
   ];
 
   function EntryRow({ post }: { post: BlogPost }) {
@@ -156,7 +155,13 @@ export default function AdminDashboardPage() {
                 </Link>
               </div>
               <div className="px-2 py-2">
-                {recentEdited.map(post => <EntryRow key={post.id} post={post} />)}
+                {isLoadingPosts ? (
+                  <p className="text-sm text-gray-400 px-4 py-6 text-center">Loading entries...</p>
+                ) : recentEdited.length > 0 ? (
+                  recentEdited.map(post => <EntryRow key={post.id} post={post} />)
+                ) : (
+                  <p className="text-sm text-gray-400 px-4 py-6 text-center">No entries yet</p>
+                )}
               </div>
             </motion.div>
 
@@ -177,10 +182,13 @@ export default function AdminDashboardPage() {
                 </Link>
               </div>
               <div className="px-2 py-2">
-                {recentPublished.length > 0
-                  ? recentPublished.map(post => <EntryRow key={post.id} post={post} />)
-                  : <p className="text-sm text-gray-400 px-4 py-6 text-center">No published entries yet</p>
-                }
+                {isLoadingPosts ? (
+                  <p className="text-sm text-gray-400 px-4 py-6 text-center">Loading entries...</p>
+                ) : recentPublished.length > 0 ? (
+                  recentPublished.map(post => <EntryRow key={post.id} post={post} />)
+                ) : (
+                  <p className="text-sm text-gray-400 px-4 py-6 text-center">No published entries yet</p>
+                )}
               </div>
             </motion.div>
           </div>
@@ -229,7 +237,7 @@ export default function AdminDashboardPage() {
                 <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
                   <div className="flex items-baseline justify-between mb-2">
                     <span className="text-sm text-gray-600 font-medium">Entries</span>
-                    <span className="font-bold text-gray-900 text-2xl leading-none">{allPosts.length || 63}</span>
+                    <span className="font-bold text-gray-900 text-2xl leading-none">{allPosts.length}</span>
                   </div>
                   <div className="text-xs text-gray-500 flex items-center gap-3">
                     <span className="flex items-center gap-1.5">
