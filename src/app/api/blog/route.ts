@@ -1,74 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, readFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  category: string;
-  status: 'draft' | 'published' | 'scheduled';
-  featuredImage: string;
-  author: string;
-  date: string;
-  readTime: string;
-  tags: string;
-  metaDescription: string;
-  scheduledDate?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const BLOG_DATA_FILE = join(process.cwd(), 'data', 'blog-posts.json');
-
-async function ensureDataDir() {
-  const dataDir = join(process.cwd(), 'data');
-  if (!existsSync(dataDir)) {
-    await mkdir(dataDir, { recursive: true });
-  }
-}
-
-async function loadPosts(): Promise<BlogPost[]> {
-  try {
-    if (existsSync(BLOG_DATA_FILE)) {
-      const data = await readFile(BLOG_DATA_FILE, 'utf-8');
-      if (!data || data.trim() === '') {
-        console.warn('Blog data file is empty, returning empty array');
-        return [];
-      }
-      return JSON.parse(data);
-    }
-  } catch (error) {
-    console.error('Error loading posts:', error);
-  }
-  return [];
-}
-
-async function savePosts(posts: BlogPost[]) {
-  await ensureDataDir();
-  await writeFile(BLOG_DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
-}
+import { createBlogPost, listBlogPosts, slugExists, toSlug } from '@/lib/blog-store';
 
 // GET - Fetch all blog posts
 export async function GET(request: NextRequest) {
   try {
-    const posts = await loadPosts();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-
-    let filteredPosts = posts;
-    
-    if (status && status !== 'all') {
-      filteredPosts = posts.filter(post => post.status === status);
-    }
+    const posts = await listBlogPosts(status || undefined);
 
     return NextResponse.json({
       success: true,
-      posts: filteredPosts,
-      total: filteredPosts.length,
+      posts,
+      total: posts.length,
     });
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -83,19 +26,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      title,
-      slug,
-      excerpt,
-      content,
-      category,
-      status,
-      featuredImage,
-      readTime,
-      tags,
-      metaDescription,
-      scheduledDate,
-    } = body;
+    const title = String(body.title || '').trim();
+    const excerpt = String(body.excerpt || '').trim();
+    const content = String(body.content || '').trim();
+    const slug = toSlug(String(body.slug || title));
 
     // Validation
     if (!title || !slug || !excerpt || !content) {
@@ -105,43 +39,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const posts = await loadPosts();
-
     // Check for duplicate slug
-    const existingPost = posts.find(p => p.slug === slug);
-    if (existingPost) {
+    if (await slugExists(slug)) {
       return NextResponse.json(
         { error: 'A post with this slug already exists' },
         { status: 400 }
       );
     }
-
-    const now = new Date().toISOString();
-    const newPost: BlogPost = {
-      id: `post-${Date.now()}`,
+    const newPost = await createBlogPost({
       title,
       slug,
       excerpt,
       content,
-      category: category || 'Guide',
-      status: status || 'draft',
-      featuredImage: featuredImage || '',
+      category: String(body.category || 'Guide').trim(),
+      status: body.status,
+      featuredImage: String(body.featuredImage || '').trim(),
+      readTime: String(body.readTime || '').trim() || '5 min',
+      tags: String(body.tags || '').trim(),
+      metaDescription: String(body.metaDescription || '').trim() || excerpt.substring(0, 160),
+      scheduledDate: body.scheduledDate ? String(body.scheduledDate) : undefined,
       author: 'TrueHost Team',
-      date: new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      }),
-      readTime: readTime || '5 min',
-      tags: tags || '',
-      metaDescription: metaDescription || excerpt.substring(0, 160),
-      scheduledDate,
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    posts.unshift(newPost);
-    await savePosts(posts);
+    });
 
     return NextResponse.json({
       success: true,

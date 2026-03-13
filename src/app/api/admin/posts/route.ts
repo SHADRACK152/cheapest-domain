@@ -1,16 +1,33 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { createBlogPost, toSlug } from '@/lib/blog-store';
 
 export async function POST(req: Request) {
   try {
     const post = await req.json();
-    const file = path.join(process.cwd(), 'data', 'blog-posts.json');
-    const raw = fs.readFileSync(file, 'utf8');
-    const arr = JSON.parse(raw || '[]');
-    arr.unshift(post);
-    fs.writeFileSync(file, JSON.stringify(arr, null, 2), 'utf8');
-    return NextResponse.json({ success: true });
+    const title = String(post.title || '').trim();
+    const excerpt = String(post.excerpt || '').trim();
+    const content = String(post.content || '').trim();
+    if (!title || !excerpt || !content) {
+      return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const created = await createBlogPost({
+      title,
+      slug: toSlug(String(post.slug || title)),
+      excerpt,
+      content,
+      category: String(post.category || 'Guide'),
+      status: post.status,
+      featuredImage: String(post.featuredImage || ''),
+      readTime: String(post.readTime || '5 min'),
+      tags: String(post.tags || ''),
+      metaDescription: String(post.metaDescription || excerpt.slice(0, 160)),
+      scheduledDate: post.scheduledDate ? String(post.scheduledDate) : undefined,
+      author: String(post.author || 'TrueHost Team'),
+      date: String(post.date || ''),
+    });
+
+    return NextResponse.json({ success: true, post: created });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err?.message || String(err) }, { status: 500 });
   }

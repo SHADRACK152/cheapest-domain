@@ -2,19 +2,89 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
+
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
+
+function getMaxUploadSizeBytes() {
+  const mb = Number(process.env.IMAGE_MAX_UPLOAD_MB || '4');
+  const safeMb = Number.isFinite(mb) && mb > 0 ? mb : 4;
+  return Math.floor(safeMb * 1024 * 1024);
+}
+
+function getStorageProvider() {
+  return (process.env.IMAGE_STORAGE_PROVIDER || 'local').toLowerCase();
+}
+
+function hasCloudinaryConfig() {
+  return Boolean(
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
+  );
+}
+
+function sanitizeFilename(name: string) {
+  return name.replace(/[^a-zA-Z0-9.-]/g, '_');
+}
+
+function getPublicId(originalName: string) {
+  const timestamp = Date.now();
+  const safeName = sanitizeFilename(originalName).replace(/\.[^.]+$/, '');
+  return `${timestamp}-${safeName}`;
+}
+
+async function uploadToCloudinary(buffer: Buffer, originalName: string, mimeType: string) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true,
+  });
+
+  const folder = process.env.CLOUDINARY_FOLDER || 'cheapest-domain/blog';
+  const publicId = getPublicId(originalName);
+  const dataUri = `data:${mimeType};base64,${buffer.toString('base64')}`;
+
+  const result = await cloudinary.uploader.upload(dataUri, {
+    folder,
+    public_id: publicId,
+    overwrite: false,
+    resource_type: 'image',
+  });
+
+  return {
+    url: result.secure_url,
+    filename: `${publicId}${result.format ? `.${result.format}` : ''}`,
+    storage: 'cloudinary',
+  };
+}
+
+async function uploadToLocal(buffer: Buffer, originalName: string) {
+  const timestamp = Date.now();
+  const filename = `${timestamp}-${sanitizeFilename(originalName)}`;
+  const uploadsDir = join(process.cwd(), 'public', 'uploads', 'blog');
+
+  if (!existsSync(uploadsDir)) {
+    await mkdir(uploadsDir, { recursive: true });
+  }
+
+  const filepath = join(uploadsDir, filename);
+  await writeFile(filepath, buffer);
+
+  return {
+    url: `/uploads/blog/${filename}`,
+    filename,
+    storage: 'local',
+  };
+}
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Upload request received');
-    
     const formData = await request.formData();
-    console.log('FormData parsed');
-    
     const file = formData.get('file') as File;
-    console.log('File from formData:', file ? `${file.name} (${file.size} bytes)` : 'null');
 
     if (!file) {
-      console.error('No file in request');
       return NextResponse.json(
         { error: 'No file uploaded' },
         { status: 400 }
@@ -22,64 +92,41 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-    console.log('File type:', file.type);
-    
-    if (!allowedTypes.includes(file.type)) {
-      console.error('Invalid file type:', file.type);
+    if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: `Invalid file type: ${file.type}. Only JPG, PNG, WEBP, and GIF are allowed.` },
+        { error: `Invalid file type: ${file.type}. Only JPG, PNG, WEBP, GIF, and AVIF are allowed.` },
         { status: 400 }
       );
     }
 
-    // Validate file size (4MB max — keep in sync with client-side guard)
-    const maxSize = 4 * 1024 * 1024; // 4MB
+    // Validate file size (defaults to 4MB)
+    const maxSize = getMaxUploadSizeBytes();
     if (file.size > maxSize) {
-      console.error('File too large:', file.size);
       return NextResponse.json(
-        { error: `Image too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum allowed size is 4MB.` },
+        {
+          error: `Image too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum allowed size is ${(maxSize / 1024 / 1024).toFixed(0)}MB.`,
+        },
         { status: 413 }
       );
     }
 
-    console.log('Validation passed, converting to buffer...');
-    
     // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    console.log('Buffer created, size:', buffer.length);
+    const provider = getStorageProvider();
 
-    // Create unique filename
-    const timestamp = Date.now();
-    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const filename = `${timestamp}-${originalName}`;
-    console.log('Filename:', filename);
-
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'blog');
-    console.log('Upload directory:', uploadsDir);
-    
-    if (!existsSync(uploadsDir)) {
-      console.log('Creating directory...');
-      await mkdir(uploadsDir, { recursive: true });
-      console.log('Directory created');
+    let uploaded;
+    if (provider === 'cloudinary' && hasCloudinaryConfig()) {
+      uploaded = await uploadToCloudinary(buffer, file.name, file.type);
+    } else {
+      uploaded = await uploadToLocal(buffer, file.name);
     }
-
-    // Save file
-    const filepath = join(uploadsDir, filename);
-    console.log('Saving to:', filepath);
-    
-    await writeFile(filepath, buffer);
-    console.log('File saved successfully');
-
-    // Return public URL
-    const publicUrl = `/uploads/blog/${filename}`;
 
     return NextResponse.json({
       success: true,
-      url: publicUrl,
-      filename: filename,
+      url: uploaded.url,
+      filename: uploaded.filename,
+      storage: uploaded.storage,
     });
   } catch (error) {
     console.error('Image upload error:', error);
