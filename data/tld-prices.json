@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-03-11T08:16:52.113Z",
+  "fetchedAt": "2026-03-30T10:52:47.538Z",
   "currencyId": 1,
   "currency": {
     "id": 1,
@@ -14583,6 +14583,610 @@
       "brand": false,
       "public": true,
       "operator": "Elegant Leader Limited"
+    },
+    ".xn--11b4c3d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--1ck2e1b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--1qqw23a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--2scrj9c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--30rr7y": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--3bst00m": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--3ds443g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--3e0b707e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--3hcrj9c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--3pxu8k": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--42c2d9a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--45br5cyl": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--45brj9c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--45q11c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--4dbrk0ce": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--4gbrim": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--54b7fta0cc": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--55qw42g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--55qx5d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--5su34j936bgsg": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--5tzm5g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--6frz82g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--6qq986b3xl": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--80adxhks": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--80ao21a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--80aqecdr1a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--80asehdb": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--80aswg": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--8y0a063a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--90a3ac": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--90ae": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--90ais": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--9dbq2a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--9et52u": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--9krt00a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--b4w605ferd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--bck1b9a5dre4c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--c1avg": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--c2br7g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--cck2b3b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--cckwcxetd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--cg4bki": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--clchc0ea0b2g2a9gcd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--czr694b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--czrs0t": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--czru2d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--d1acj3b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--d1alf": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--e1a4c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--eckvdtc9d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--efvy88h": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fct429k": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fhbei": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fiq228c5hs": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fiq64b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fiqs8s": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fiqz9s": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fjq720a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--flw351e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fpcrj9c3d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fzc2c9e2c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--fzys8d69uvgm": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--g2xx48c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--gckr3f0f": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--gecrj9c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--gk3at1e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--h2breg3eve": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--h2brj9c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--h2brj9c8c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--hxt814e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--i1b6b1a6a2e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--imr513n": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--io0a7i": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--j1aef": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--j1amh": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--j6w193g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--jlq480n2rg": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--jvr189m": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--kcrx77d1x4a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--kprw13d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--kpry57d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--kput3i": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--l1acc": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--lgbbat1ad8j": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgb9awbf": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgba3a3ejt": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgba3a4f16a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgba7c0bbn0a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbaam7a8h": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbab2bd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbah1a3hjkrd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbai9azgqp6j": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbayh7gpa": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbbh1a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbbh1a71e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbc0a9azcg": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbca7dzdo": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbcpq6gpa1a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgberp4a5d4ar": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbgu82a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbi4ecexp": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbpl2fh": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbt3dhd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbtx2b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mgbx4cd0ab": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mix891f": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mk1bu44c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--mxtq1m": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--ngbc5azd": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--ngbe9e0a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--ngbrx": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--node": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--nqv7f": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--nqv7fs00ema": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--nyqy26a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--o3cw4h": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--ogbpf8fl": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--otu796d": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--p1acf": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--p1ai": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--pgbs0dh": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--pssy2u": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--q7ce6a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--q9jyb4c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--qcka1pmc": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--qxa6a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--qxam": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--rhqv96g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--rovu88b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--rvc1e0am3e": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--s9brj9c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--ses554g": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--t60b56a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--tckwe": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--tiq49xqyj": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--unup4y": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--vermgensberater-ctb": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--vermgensberatung-pwb": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--vhquv": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--vuq861b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--w4r85el8fhu5dnra": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--w4rs40l": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--wgbh1c": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--wgbl6a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--xhq521b": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--xkc2al3hye2a": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--xkc2dl3a5ee0h": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--y9a3aq": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--yfro4i67o": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--ygbi2ammx": {
+      "reg": 0,
+      "renew": 0
+    },
+    ".xn--zfr164b": {
+      "reg": 0,
+      "renew": 0
     },
     ".xxx": {
       "reg": 11250,

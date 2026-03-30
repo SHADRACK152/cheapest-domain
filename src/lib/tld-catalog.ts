@@ -7,7 +7,7 @@
  *
  * Exports:
  *  - CatalogEntry  — extended TldEntry with brand/publicTld/operator fields
- *  - TLD_CATALOG   — all publicly-registrable priced TLDs, sorted popularity-first
+ *  - TLD_CATALOG   — all known TLDs from unified sources, sorted popularity-first
  *  - BRAND_TLDS    — brand/corporate TLDs (not publicly registrable)
  *  - cheapestCatalog() — same API as cheapest() from tld-registrar-data
  */
@@ -86,11 +86,9 @@ const detailedCatalog: CatalogEntry[] = TLD_DATA.map((e) => {
 const simpleCatalog: CatalogEntry[] = (Object.entries(priceEntries)
   .filter(([tld, raw]) => {
     if (detailedTldsSet.has(tld))          return false; // already in detailed
-    if (raw.brand === true)                return false; // brand/corporate
-    if (!raw.reg && !raw.renew)            return false; // unpriced
     return true;
   })
-  .map(([tld, raw]): CatalogEntry | null => {
+  .map(([tld, raw]): CatalogEntry => {
     const isCcTld = /^\.[a-z]{2}$/.test(tld);
 
     // Build prices from available sources (USD)
@@ -116,28 +114,21 @@ const simpleCatalog: CatalogEntry[] = (Object.entries(priceEntries)
       });
     }
 
-    // Only include TLDs with at least one verified registrar source.
-    // TLDs with prices but no sources came from a legacy WHMCS cache and
-    // may not be actively offered by any listed registrar — skip them here.
-    // They are still searchable via truehost-fetcher (reads tld-prices.json directly).
-    if (!prices.length) return null;
-
     return {
       tld,
       type:         isCcTld ? 'country' : 'new-generic',
       category:     [],
       whoisPrivacy: false,
       dnssec:       false,
-      brand:        false,
-      publicTld:    true,
+      brand:        raw.brand === true,
+      publicTld:    raw.public !== false,
       operator:     raw.operator ?? null,
       prices,
     };
-  })
-  .filter((e): e is CatalogEntry => e !== null));
+  }));
 
 /**
- * Full unified TLD catalog — publicly registrable + priced.
+ * Full unified TLD catalog.
  * Detailed entries sorted by popularity first; simple entries alphabetically appended.
  */
 export const TLD_CATALOG: CatalogEntry[] = [

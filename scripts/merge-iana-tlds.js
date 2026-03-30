@@ -1,7 +1,7 @@
 /**
  * Merges IANA TLD list into tld-prices.json
  * - Reads data/tlds-alpha-by-domain.txt (official IANA list)
- * - Skips IDN/punycode TLDs (XN--)
+ * - Includes IDN/punycode TLDs (XN--) by default
  * - Converts to lowercase dot-prefixed format (.com, .net, etc.)
  * - Adds TLDs missing from tld-prices.json with reg:0/renew:0 (unpriced)
  * - Sorts all TLD keys alphabetically
@@ -13,6 +13,7 @@ const path = require('path');
 const dataDir = path.join(__dirname, '..', 'data');
 const ianaFile = path.join(dataDir, 'tlds-alpha-by-domain.txt');
 const pricesFile = path.join(dataDir, 'tld-prices.json');
+const includeIdn = process.env.INCLUDE_IDN !== 'false';
 
 // 1. Parse IANA TLD file
 const rawLines = fs.readFileSync(ianaFile, 'utf-8')
@@ -20,13 +21,16 @@ const rawLines = fs.readFileSync(ianaFile, 'utf-8')
   .map(l => l.trim())
   .filter(l => l && !l.startsWith('#'));
 
-// Keep only standard (non-IDN punycode) TLDs
+const idnCount = rawLines.filter(l => l.toUpperCase().startsWith('XN--')).length;
+
 const ianaTlds = rawLines
-  .filter(l => !l.toUpperCase().startsWith('XN--'))
+  .filter(l => includeIdn || !l.toUpperCase().startsWith('XN--'))
   .map(l => '.' + l.toLowerCase());
 
-console.log(`IANA standard TLDs : ${ianaTlds.length}`);
-console.log(`IANA IDN (XN--) skipped: ${rawLines.length - ianaTlds.length}`);
+console.log(`IANA total TLDs     : ${rawLines.length}`);
+console.log(`IANA IDN (XN--)     : ${idnCount}`);
+console.log(`Include IDN         : ${includeIdn}`);
+console.log(`IANA selected TLDs  : ${ianaTlds.length}`);
 
 // 2. Read existing prices
 const pricesData = JSON.parse(fs.readFileSync(pricesFile, 'utf-8'));

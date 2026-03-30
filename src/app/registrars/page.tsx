@@ -18,10 +18,15 @@ type TldRow = {
   type: string;
   category: string[];
   popularity?: number;
+  brand: boolean;
+  publicTld: boolean;
+  operator: string | null;
+  isIdn: boolean;
   whoisPrivacy: boolean;
   dnssec: boolean;
-  cheapReg: number;
-  cheapRenew: number;
+  priced: boolean;
+  cheapReg: number | null;
+  cheapRenew: number | null;
   cheapRegName: string;
   cheapRenewName: string;
   cheapRegPromo?: string;
@@ -45,7 +50,8 @@ const CATEGORIES = [
 const PER_PAGE_OPTIONS = [10, 25, 50, 100];
 
 type Currency = 'USD' | 'KES';
-function fmt(usd: number, currency: Currency) {
+function fmt(usd: number | null, currency: Currency) {
+  if (usd === null) return 'N/A';
   return currency === 'KES'
     ? `KES ${Math.round(usd * USD_TO_KES_RATE).toLocaleString()}`
     : `$${usd.toFixed(2)}`;
@@ -55,17 +61,24 @@ function fmt(usd: number, currency: Currency) {
 const ALL_ROWS: TldRow[] = TLD_CATALOG.map((e) => {
   const { cheapReg, cheapRenew, cheapRegName, cheapRenewName } = cheapestCatalog(e);
   const cheapRegEntry = e.prices.find((p) => p.reg === cheapReg);
+  const priced = e.prices.length > 0;
+
   return {
     tld: e.tld,
     type: e.type,
     category: e.category,
     popularity: e.popularity,
+    brand: e.brand,
+    publicTld: e.publicTld,
+    operator: e.operator,
+    isIdn: e.tld.startsWith('.xn--'),
     whoisPrivacy: e.whoisPrivacy,
     dnssec: e.dnssec,
-    cheapReg,
-    cheapRenew,
-    cheapRegName,
-    cheapRenewName,
+    priced,
+    cheapReg: priced ? cheapReg : null,
+    cheapRenew: priced ? cheapRenew : null,
+    cheapRegName: priced ? cheapRegName : 'Unavailable',
+    cheapRenewName: priced ? cheapRenewName : 'Unavailable',
     cheapRegPromo: cheapRegEntry?.promoCode,
     cheapRegUrl:   cheapRegEntry?.url,
   };
@@ -78,11 +91,13 @@ export default function RegistrarsPage() {
   const [search, setSearch]       = useState('');
   const [type, setType]           = useState('');
   const [category, setCategory]   = useState('');
-  const [maxReg, setMaxReg]       = useState(100);
+  const [maxReg, setMaxReg]       = useState<number | null>(null);
   const [sortField, setSortField] = useState('popularity');
   const [page, setPage]           = useState(1);
   const [perPage, setPerPage]     = useState(25);
   const [currency, setCurrency]   = useState<Currency>('USD');
+  const [includeBrand, setIncludeBrand] = useState(true);
+  const [includeIdn, setIncludeIdn] = useState(true);
   const [copied, setCopied]       = useState<string | null>(null);
 
   const copyCode = useCallback((code: string) => {
@@ -99,12 +114,16 @@ export default function RegistrarsPage() {
     if (search)   results = results.filter((e) => e.tld.includes(search.toLowerCase()));
     if (type)     results = results.filter((e) => e.type === type);
     if (category) results = results.filter((e) => e.category.includes(category));
-    results = results.filter((e) => e.cheapReg <= maxReg);
+    if (!includeBrand) results = results.filter((e) => !e.brand);
+    if (!includeIdn) results = results.filter((e) => !e.isIdn);
+    if (maxReg !== null) {
+      results = results.filter((e) => e.priced && e.cheapReg !== null && e.cheapReg <= maxReg);
+    }
 
     if (sortField === 'reg') {
-      results = [...results].sort((a, b) => a.cheapReg - b.cheapReg);
+      results = [...results].sort((a, b) => (a.cheapReg ?? Number.POSITIVE_INFINITY) - (b.cheapReg ?? Number.POSITIVE_INFINITY));
     } else if (sortField === 'renew') {
-      results = [...results].sort((a, b) => a.cheapRenew - b.cheapRenew);
+      results = [...results].sort((a, b) => (a.cheapRenew ?? Number.POSITIVE_INFINITY) - (b.cheapRenew ?? Number.POSITIVE_INFINITY));
     } else {
       results = [...results].sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
     }
@@ -114,11 +133,12 @@ export default function RegistrarsPage() {
     const safePageN = Math.min(page, totalPages);
     const rows = results.slice((safePageN - 1) * perPage, safePageN * perPage);
     return { rows, total, totalPages };
-  }, [search, type, category, maxReg, sortField, page, perPage]);
+  }, [search, type, category, includeBrand, includeIdn, maxReg, sortField, page, perPage]);
 
   const resetFilters = () => {
     setSearch(''); setType(''); setCategory('');
-    setMaxReg(100); setSortField('popularity'); setPage(1);
+    setIncludeBrand(true); setIncludeIdn(true);
+    setMaxReg(null); setSortField('popularity'); setPage(1);
   };
 
   return (
@@ -129,7 +149,7 @@ export default function RegistrarsPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-3 mb-8">
           <span className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-1.5 text-sm font-medium text-primary-600">
             <Globe className="h-4 w-4" />
-            {total > 0 ? `${total} TLDs compared` : 'Domain Registrar Comparison'}
+            {total > 0 ? `${total} TLDs shown` : 'Domain Registrar Comparison'}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-[#111111]">Compare Domain Prices</h1>
           <p className="text-gray-500 max-w-xl mx-auto">
@@ -186,12 +206,42 @@ export default function RegistrarsPage() {
 
           {/* Max Reg Price */}
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-400 font-medium">Max Reg Price: ${maxReg}</label>
+            <label className="text-xs text-gray-400 font-medium">
+              Max Reg Price: {maxReg === null ? 'Any' : `$${maxReg}`}
+            </label>
             <input
-              type="range" min={1} max={100} value={maxReg}
+              type="range" min={1} max={500} value={maxReg ?? 500}
               onChange={(e) => setMaxReg(Number(e.target.value))}
               className="w-32 accent-primary-600"
             />
+            <button
+              type="button"
+              onClick={() => setMaxReg(null)}
+              className="text-[11px] text-primary-600 hover:underline text-left"
+            >
+              Clear price cap
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 px-2 py-2 rounded-xl border border-gray-200 bg-gray-50">
+            <label className="inline-flex items-center gap-1.5 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                checked={includeBrand}
+                onChange={(e) => setIncludeBrand(e.target.checked)}
+                className="accent-primary-600"
+              />
+              Include Brand TLDs
+            </label>
+            <label className="inline-flex items-center gap-1.5 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                checked={includeIdn}
+                onChange={(e) => setIncludeIdn(e.target.checked)}
+                className="accent-primary-600"
+              />
+              Include IDN (xn--)
+            </label>
           </div>
 
           {/* Sort */}
@@ -296,11 +346,17 @@ export default function RegistrarsPage() {
                         row.type === 'new-generic' && 'bg-violet-50 text-violet-600',
                         row.type === 'sponsored'   && 'bg-orange-50 text-orange-600',
                       )}>{row.type.replace('-', ' ')}</span>
+                      {row.brand && <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700">brand</span>}
+                      {row.isIdn && <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700">idn</span>}
+                      {!row.publicTld && <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-700">restricted</span>}
                     </div>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {row.category.slice(0, 2).map((c) => (
                         <span key={c} className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded capitalize">{c}</span>
                       ))}
+                      {!row.category.length && row.operator && (
+                        <span className="text-[10px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">{row.operator}</span>
+                      )}
                     </div>
                   </td>
 
